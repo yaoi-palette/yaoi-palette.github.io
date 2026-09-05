@@ -5,8 +5,10 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F15975728%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "オフィスラブ"
+  ],
   "description": "",
   "price": 753,
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

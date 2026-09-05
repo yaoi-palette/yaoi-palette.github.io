@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17427898%2F",
   "mainColor": "blue",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "学園"
+  ],
   "description": "「永遠なんて、ないのにーー」\n\n母親に捨てられ、孤独に生きる高校生・永遠。\n愛されることを知らず怯えるトワは、目の前に現れた斎条美春に懐かしい香りを感じ急激に惹かれていく。\n\n突然の口づけに、容赦なく貫かれるカラダ。\n冷たい瞳の奥の愛が見えない関係をきっかけに、\nかすかな温もりを追いかけるトワへ、美春の中にも初めての感情が芽生え始め…。\n\n永遠じゃなくても、今一緒にいてくれるのがうれしい…。\n甘美で純粋な、孤独な2人の恋の密約。",
   "price": 799,
   "publishedDate": "2023-04-25",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

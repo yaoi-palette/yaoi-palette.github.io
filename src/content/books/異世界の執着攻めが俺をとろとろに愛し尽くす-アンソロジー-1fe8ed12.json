@@ -5,9 +5,12 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18673264%2F",
   "mainColor": "white",
   "peopleCount": "group",
-  "tags": [],
+  "tags": [
+    "執着",
+    "異世界・転生"
+  ],
   "description": "",
   "price": 935,
   "publishedDate": "2026-08-25",
-  "memo": "楽天APIから自動生成。tagsは未設定のため要確認。"
+  "memo": "楽天APIから自動生成。tagsはキーワードからの自動推定のため要確認。"
 }

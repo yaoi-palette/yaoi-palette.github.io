@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17543122%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "獣人"
+  ],
   "description": "「がっつくなって、どっちが襲われてんだよ」\n同じ大学の人気ロックバンドで、ギター担当のシンゴに一途な恋心を抱いているクールイケメンの瀧。\n祖母の死を悼み泣いてくれたシンゴにお礼をするはずが、不器用な瀧は思い余って告白をしてしまう。\nシンゴと付き合い始めたものの、今すぐシたい瀧に対し、予想外に優しいシンゴのスキンシップに戸惑いーー！？",
   "price": 874,
   "publishedDate": "2023-08-08",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18272288%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "学園"
+  ],
   "description": "お互いがお気に入り？友達でもなく、恋人でもない関係性。\n\n河内くんは同じ学年の松本くんが「推し」。推しに認知されるつもりはなかったのに、ある日松本くんに絡まれてしまいーー？\n関西弁の男子高校生2人によるしゃべくりまくりのボーイズ・ライフ。\n\t\n彗星のごとくあらわれた期待の新人・mememe、待望のデビューコミック第1巻！",
   "price": 880,
   "publishedDate": "2025-08-29",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

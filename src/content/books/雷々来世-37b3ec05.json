@@ -5,9 +5,12 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17842202%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "学園",
+    "王道ファンタジー"
+  ],
   "description": "高校生の七星にはずっと見つづけている夢がある。\nそれは前世の記憶で、そこで七星は何よりも大切な主人に仕える騎士だった。\n記憶が本物か疑っていた七星だが、ある日、主人であったレオが転校生の雷央として目の前に現れる。\n雷央にも記憶が残っていて、七星との再会を無邪気に喜ぶ。\nだが、彼は肝心なことを忘れていた。\n七星にとって雷央は絶対会いたくない人だったのだ──",
   "price": 814,
   "publishedDate": "2024-07-01",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

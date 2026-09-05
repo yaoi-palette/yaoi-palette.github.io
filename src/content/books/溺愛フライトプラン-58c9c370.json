@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18379017%2F",
   "mainColor": "black",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "溺愛"
+  ],
   "description": "",
   "price": 814,
   "publishedDate": "2025-12-01",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

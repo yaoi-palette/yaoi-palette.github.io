@@ -5,9 +5,12 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17259147%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "年の差",
+    "幼馴染"
+  ],
   "description": "「あの日の夜のこと、覚えてますよね？」\n出張先のイベントで大学生アルバイトの久住と出会った岸。意気投合した二人は、その夜飲み比べをすることに。\n話も弾み、酔いつぶれた岸は、送ってもらったホテルでつい久住に手を出してしまう。そのまま成り行きで一夜を共にするが、歳の差もある久住は恋愛対象外…そんな風に自己完結していた。けれど久住から「これからも会いに行く」と宣言され──？ 表題作のほか、腐れ縁幼なじみのすれ違いラブ「あたりまえのきみ」も同時収録♪",
   "price": 759,
   "publishedDate": "2022-10-07",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

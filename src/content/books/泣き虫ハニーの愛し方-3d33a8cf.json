@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17598466%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "オフィスラブ"
+  ],
   "description": "「蜂谷さんの泣き顔、すごく可愛くて、たまらないー」\n社内で「鉄仮面」と噂されるエリートリーマンの蜂谷仁（はちや じん）には、誰にも言えない秘密があった。\nそれは、本当は極度のあがり症で、緊張の糸が切れると涙が止まらなくなってしまうこと。\nある日、優秀で気が利く後輩の立花郁人（たちばな いくと）にその秘密を知られてしまうが、\n立花は蜂谷の泣き顔を見て「可愛い」と言い放ち、そのままベッドでー?",
   "price": 759,
   "publishedDate": "2023-09-29",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

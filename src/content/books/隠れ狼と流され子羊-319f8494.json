@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18502390%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "獣人"
+  ],
   "description": "ショッピングモールの書店でバイトをする大学生・柊は、カフェバイトの千紘からの猛アプローチで恋人同士になる。\nコミュ障で接客も不得手な柊にとって、いつも人懐っこい笑顔で優しく尽くしてくれる千紘は、心から安心できる存在だった。 \n迎えた、初めてのお泊まりデート。ベッドの中で千紘がふと見せた別人のように鋭い表情が柊の胸にひっかかる。\n翌朝、いつもと変わらない様子の千紘を前に、気のせいだったのかと思い直す柊。\nしかし、それをきっかけに千紘への違和感はどんどん大きくなっていきーー!?",
   "price": 874,
   "publishedDate": "2026-03-10",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

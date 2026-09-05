@@ -5,9 +5,12 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17551975%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "執着",
+    "幼馴染"
+  ],
   "description": "ミツは高校時代、片想いしていた幼馴染のナナと身体の関係があった。\nしかし、突然ナナに「こういうのもうやめる？」と聞かれ、嫌だと言えず失恋してしまう。\nそれ以来、ナナと連絡をとることはなかったが、気持ちは引きずったまま大学生になったミツは、バイト中に彼と再会してしまう。\n自分に気づいていないようで安堵したのも束の間、バイト終わりを待ち伏せされ、一緒にミツの家に行くことに。\nそこでなぜかミツに執着を見せるナナ。\n傷ついた記憶がよみがえる一方で、彼への想いが残るミツはーー。",
   "price": 792,
   "publishedDate": "2023-08-12",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

@@ -5,9 +5,13 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17879813%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "幼馴染",
+    "学園",
+    "芸能・アイドル"
+  ],
   "description": "「今の俺がいるのは竜のおかげだよ」容姿にコンプレックスを持つ高校生・込山竜は、クラスメイトからの「イジリ」に何も言い返せない日々。ある日、芸能人並みの超美形な同級生・深田恵麻に声を掛けられる。「自分とは違う世界の人だ」と拒絶する竜だが、実は2人は小1の時の幼なじみ。自分と同じように容姿へのコンプレックスを持っていたはずの恵麻は、容姿だけでなく中身も強くなっており、それは竜のおかげだと、あっという間に距離を縮めてきて!?超美形モテ男子×心優しいコンプレックス持ち男子のグローアップ・ラブ！",
   "price": 946,
   "publishedDate": "2024-07-25",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

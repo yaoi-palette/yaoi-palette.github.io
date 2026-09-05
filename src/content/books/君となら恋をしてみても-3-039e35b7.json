@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17412117%2F",
   "mainColor": "red",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "学園"
+  ],
   "description": "晴れてお付き合いをすることになった天と龍司。\n浮かれる天に対していつもどおりに見える龍司にも実はしっかり変化が。\n初めてのやきもちやすれ違い、えのすいデート、そして…。\n江の島を舞台に描かれる男子高校生の純愛物語、待望の第3巻！\n2023年4月刊",
   "price": 792,
   "publishedDate": "2023-04-05",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

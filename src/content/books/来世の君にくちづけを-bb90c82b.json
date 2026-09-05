@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16827866%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "異世界・転生"
+  ],
   "description": "大学生の広人には＜前世＞の記憶がある。\nかつては王位を継ぐ身分であったこと、けれど平民である男と恋をし、深く愛していたこと。\n\nそして2人を引き裂いた、運命の「あの日」のことも…。\n\n幼いころに記憶を取りもどしてから、現世でもずっと、最愛の人・ミカを探し続けていた広人。\n十数年の時を経て、ふたたび2人は巡りあうが、ミカの生まれ変わりである洸には記憶がないままで……。\n遠い記憶をたぐり寄せ、彼らはまた恋をはじめるーー。\n\n前世の恋をやり直す、ドラマティック・転生ラブ！",
   "price": 814,
   "publishedDate": "2021-09-07",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

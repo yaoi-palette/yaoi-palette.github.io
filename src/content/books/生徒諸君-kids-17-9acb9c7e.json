@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18458478%2F",
   "mainColor": "pink",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "学園"
+  ],
   "description": "北城尚子、通称ナッキーが海外に渡って数年。北城家にやってきたのはナッキーが産んだ双子・翔と流華だった。2人が中学生になってから、流華の大怪我、雅博の転校、そしてナッキーの帰国と、大きな出来事が続く1年を送っていた。2年生になった翔はアリの研究に没頭。流華は隼と交際を始める。生徒会として文化祭を成功させ、一息ついた流華に一本の電話が…。",
   "price": 594,
   "publishedDate": "2026-01-13",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

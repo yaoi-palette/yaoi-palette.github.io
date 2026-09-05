@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18185224%2F",
   "mainColor": "blue",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "オフィスラブ"
+  ],
   "description": "営業の綾川とデザイナーの山岸は、社内でも有名な犬猿の仲!…だけど、プライベートでは一転、甘々ラブラブカップルでヒミツの社内恋愛を楽しんでいる。そんなある日、現場スタッフから綾川の噂話を持ちかけられた山岸。聞くと、綾川が元・朝ドラ女優と付き合っているという内容で!?　笑い飛ばしていた2人だったけど、事態は思わぬ方向に!!?",
   "price": 830,
   "publishedDate": "2025-04-24",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

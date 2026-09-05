@@ -5,9 +5,12 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18425179%2F",
   "mainColor": "black",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "獣人",
+    "刑事・警察"
+  ],
   "description": "この部屋から一歩も出ずに、朝も昼も夜もずっと繋がっていられたらいいのに──\n「私と手を組みませんか？ 今度は『正義』の側で」元詐欺師の辰巳たつみに取引を持ちかけてきたのは、汐澤しおざわ組に潜入捜査中の刑事・久世くぜ。けれど、不信感を拭えない辰巳は即座に拒絶!! これ以上、大地だいちを危険に巻き込みたくない──。ところが少しも諦めない久世は、辰巳の店バーに現れて、しかも大地と鉢合わせしてしまい…!?　遠ざけておきたかった二人の邂逅が、辰巳の日常を奪っていく──。",
   "price": 880,
   "publishedDate": "2025-12-25",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18300340%2F",
   "mainColor": "green",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "学園"
+  ],
   "description": "大人気シリーズ、累計260万部突破ーー！\n\n太一の会社の後輩に、二人の関係がバレてしまい!?\n\n\n\n端正なルックスで誰もが一目置く存在でありながら、\n\n難聴を患ったことで自分の殻に閉じこもり気味だった杉原航平と、\n\n底抜けに明るい社会人の佐川太一。\n\n元同級生の二人は互いに惹かれ合い、\nいつしか恋人同士になったーー。\n\n航平も希望の会社に内定が決まり、\n\n多忙を極める二人はなかなか会えないまま、\n\n太一の誕生日を迎え……。",
   "price": 836,
   "publishedDate": "2025-09-01",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

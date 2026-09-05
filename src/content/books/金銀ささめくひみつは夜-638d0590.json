@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17558517%2F",
   "mainColor": "yellow",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "オフィスラブ"
+  ],
   "description": "魔術を用いて人々のライフラインに欠かせない鉱物を発掘する、通称《術部》のリーダーとして活躍するアロイ。\nその華やかな美貌と、高貴な家柄を笠に着たりしない人当たりの好さで周囲の誰からも慕われている。\n一方、眉間に皺を寄せた仕事人間で《主計局》の同僚に煙たがられるミカドは、“みんなの”アロイ様相手にも態度を崩さない。\n傍から見れば何の接点もなく、反りも合わない二人。けれど本当は、誰にも内緒の関係で……？",
   "price": 880,
   "publishedDate": "2023-08-24",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

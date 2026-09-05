@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17371900%2F",
   "mainColor": "black",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "同棲"
+  ],
   "description": "■あらすじ\n帰宅すると、同棲中の彼女と見知らぬ男性の浮気現場に遭遇してしまった悟。\n急激に彼女への気持ちが冷めていくのを感じ、怒りもせず家を出て行ってしまう。するとなぜか、彼女の浮気相手・真叶が追いかけてきて…!?\n行くあてもなかった悟は真叶と飲みに行くが、そのまま酔った勢いで一晩を共にしてしまい…。",
   "price": 852,
   "publishedDate": "2023-02-03",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

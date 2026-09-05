@@ -5,9 +5,12 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17400143%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "ヤクザ",
+    "学園"
+  ],
   "description": "恋には初心なヤクザ×お人好し男子高校生のすれ違いBLコメディ\n街の小さなケーキ屋で働く高校生の「バイト君」は、口数少ない常連客の「ヤクザさん」に内心ビビりながら今日も元気に接客中！でも実は、ヤクザさんはバイト君に片想いをしていて…!? そんなある日、不良に絡まれたところを救われ、ヤクザさんの優しい一面を知ったバイト君。甘いスイーツを通して少しずつ二人は仲良くなっていくけど、ヤクザさんの恋心はもどかしさが増す一方でーー。",
   "price": 730,
   "publishedDate": "2023-03-10",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

@@ -5,9 +5,11 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16732362%2F",
   "mainColor": "white",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "幼馴染"
+  ],
   "description": "ゾンビ蔓延る世界で愛を掴めるか⁉\n\n死んだ人間が立ち上がり人を襲い、噛まれるとゾンビに感染するという未知のウイルスによって世界が壊れはじめた。そんな世界で生き残り続ける、隣同士に暮らしてきた幼馴染の光（ひかる）と藍（あい）。\n光のことをずっと好きだったという藍は、感染者がひしめく中で暴漢に襲われている光を助けるものの、襲われた姿に激昂。光はこれまでに見たことのない顔で藍から「俺のものにする」と宣言されーーー?!",
   "price": 750,
   "publishedDate": "2021-06-25",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

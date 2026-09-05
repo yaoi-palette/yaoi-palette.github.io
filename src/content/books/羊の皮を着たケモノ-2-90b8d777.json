@@ -5,9 +5,13 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17673956%2F",
   "mainColor": "black",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "執着",
+    "幼馴染",
+    "獣人"
+  ],
   "description": "あいつが俺から離れていけないよう、いっそ繋いでしまいたい──\n\n前科一犯の元結婚詐欺師、でも現在は更生して真面目にバーテンダーの修業中──。悪事から足は洗ったけれど、叩けば埃の出る辰巳(たつみ)。そんな辰巳が唯一執着するのは、元被害者の弟で、恋人の大地(だいち)だ。最悪な出会いだったのに、傍にいてくれるあいつがいれば、俺はきっと変われる──。言葉にできない独占欲を抱えて働く辰巳は、ある晩、幼なじみの厄介な弟分と再会して…!?",
   "price": 814,
   "publishedDate": "2023-12-25",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }

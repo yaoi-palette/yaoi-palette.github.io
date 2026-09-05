@@ -5,9 +5,12 @@
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18148656%2F",
   "mainColor": "black",
   "peopleCount": "duo",
-  "tags": [],
+  "tags": [
+    "同棲",
+    "王道ファンタジー"
+  ],
   "description": "「俺以外に負けるなよ 王子様」\n家族の借金を返済するため俺様系No.1ホストの黎夜に\"\"枕営業\"\"をしていた茉白は\n紆余曲折の末、両想いになり黎夜と現在同棲中。\n意地悪で傲慢、だけど時折優しく茉白を甘やかす黎夜との生活に\n幸せを感じながらも、もっと黎夜のことを知りたいと思うようになっていた。\nそんな時、大阪の姉妹店からNo.1ホスト・美波がやってくる。\n売り上げ至上主義で昔の黎夜を彷彿とさせる美波は\n何やら黎夜の過去を知っているようでーー？",
   "price": 874,
   "publishedDate": "2025-04-10",
-  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。"
+  "memo": "楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsはキーワードからの自動推定のため要確認。"
 }
