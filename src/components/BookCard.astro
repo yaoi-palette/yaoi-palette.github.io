@@ -12,7 +12,7 @@ const authorHref = `/authors/${slugify(author)}/`;
 
 <div
   class="book-card group overflow-hidden rounded-xl border border-line bg-surface shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-wine/10"
-  data-color={mainColor}
+  data-color={mainColor.join(',')}
   data-people={peopleCount}
   data-tags={tags.join(',')}
   data-title={title}

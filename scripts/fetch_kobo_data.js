@@ -279,7 +279,7 @@ function buildBookJson(item, fallbackTitle, mainColorResult, peopleCountResult) 
     author: item?.author ?? '不明',
     coverUrl: upscaleCoverUrl(item?.largeImageUrl || item?.mediumImageUrl || item?.smallImageUrl || ''),
     affiliateUrl: item?.affiliateUrl || item?.itemUrl || '',
-    mainColor: mainColorResult.mainColor,
+    mainColor: [mainColorResult.mainColor], // 2色目は手動確認時に追加する運用
     peopleCount: peopleCountResult.peopleCount,
     tags: [], // 要確認: スパダリ・執着・オフィスラブ等のタグを追記
     description: item?.itemCaption ?? '',

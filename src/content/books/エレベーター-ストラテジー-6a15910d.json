@@ -3,7 +3,9 @@
   "author": "春之",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4430/9784396784430.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F15299115%2F",
-  "mainColor": "white",
+  "mainColor": [
+    "white"
+  ],
   "peopleCount": "duo",
   "tags": [
     "オフィスラブ"

@@ -126,6 +126,7 @@
   legend { font-size: 12px; color: var(--sub); padding: 0 4px; }
   .swatches { display: flex; gap: 8px; flex-wrap: wrap; }
   .swatch { display: flex; align-items: center; gap: 4px; font-size: 12px; cursor: pointer; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--border); }
+  .swatch.on { background: var(--accent-soft); border-color: var(--accent); color: #8a2b52; }
   .swatch input { margin: 0; }
   .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,.15); }
   .radio-row { display: flex; gap: 14px; font-size: 13px; }
@@ -211,6 +212,8 @@ const PEOPLE = [['solo','ソロ'], ['duo','デュオ(2人)'], ['group','グル�
 let books = [];
 let currentIndex = 0;
 let currentTags = new Set();
+let currentColors = new Set();
+const MAX_COLORS = 2; // 表紙の主要カラーは最大2色まで登録できる
 
 const mainEl = document.getElementById('main');
 const sidebarEl = document.getElementById('sidebar');
@@ -245,6 +248,7 @@ function render() {
 
   const book = list[currentIndex];
   currentTags = new Set(book.tags || []);
+  currentColors = new Set(Array.isArray(book.mainColor) ? book.mainColor : [book.mainColor].filter(Boolean));
   renderSidebar(list, book);
 
   mainEl.innerHTML = `
@@ -260,7 +264,7 @@ function render() {
         <div class="description">${escapeHtml(book.description || '(あらすじなし)')}</div>
 
         <fieldset>
-          <legend>mainColor</legend>
+          <legend>mainColor（最大2色）</legend>
           <div class="swatches" id="colorSwatches"></div>
         </fieldset>
 
@@ -292,8 +296,23 @@ function render() {
   const colorSwatches = document.getElementById('colorSwatches');
   COLORS.forEach(([key, hex]) => {
     const label = document.createElement('label');
-    label.className = 'swatch';
-    label.innerHTML = `<input type="radio" name="mainColor" value="${key}" ${book.mainColor===key?'checked':''}/><span class="dot" style="background:${hex}"></span>${key}`;
+    label.className = 'swatch' + (currentColors.has(key) ? ' on' : '');
+    label.innerHTML = `<input type="checkbox" value="${key}" ${currentColors.has(key) ? 'checked' : ''}/><span class="dot" style="background:${hex}"></span>${key}`;
+    const checkbox = label.querySelector('input');
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        if (currentColors.size >= MAX_COLORS) {
+          checkbox.checked = false;
+          alert(`mainColorは${MAX_COLORS}つまでです。外してから追加してください。`);
+          return;
+        }
+        currentColors.add(key);
+        label.classList.add('on');
+      } else {
+        currentColors.delete(key);
+        label.classList.remove('on');
+      }
+    });
     colorSwatches.appendChild(label);
   });
 
@@ -371,9 +390,14 @@ async function saveCurrent(book, advance) {
   const posBefore = listBefore.findIndex(b => b.filename === book.filename);
   const nextFilenameBefore = listBefore[posBefore + 1]?.filename;
 
+  if (currentColors.size === 0) {
+    alert('mainColorを少なくとも1つ選んでください。');
+    return;
+  }
+
   const patch = {
     tags: Array.from(currentTags),
-    mainColor: getSelected('mainColor'),
+    mainColor: Array.from(currentColors),
     peopleCount: getSelected('peopleCount'),
     confirmed: true,
   };

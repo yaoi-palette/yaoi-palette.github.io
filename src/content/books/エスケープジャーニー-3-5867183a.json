@@ -3,7 +3,9 @@
   "author": "おげれつたなか",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7873/9784799737873.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F15512840%2F",
-  "mainColor": "yellow",
+  "mainColor": [
+    "yellow"
+  ],
   "peopleCount": "duo",
   "tags": [],
   "description": "",

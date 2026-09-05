@@ -3,7 +3,9 @@
   "author": "安滋かづ",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4073/9784864424073_1_4.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F16551528%2F",
-  "mainColor": "white",
+  "mainColor": [
+    "white"
+  ],
   "peopleCount": "duo",
   "tags": [],
   "description": "不動産会社に勤める三枝（さえぐさ）は、霊がいると「発情」してしまう厄介な体質。一方、霊は見えないが除霊ができる新入社員の班目（まだらめ）は新卒らしからぬ生意気な態度で三枝と接するが、ひょんなことから、二人で事故物件の処理をすることに。\n班目によって除霊はできたものの、すでに発情がはじまった三枝の姿を目の前にして…！？",

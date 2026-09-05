@@ -26,15 +26,16 @@ const peopleOptions = [
     <div class="flex flex-col gap-4">
       <!-- Main Color -->
       <div>
-        <p class="mb-2 text-xs text-inkdim">表紙の色で探す</p>
-        <div class="flex flex-wrap gap-2" id="color-filters" role="group">
+        <p class="mb-2 text-xs text-inkdim">表紙の色で探す（1つだけ選べます）</p>
+        <div class="flex flex-wrap gap-2" id="color-filters" role="radiogroup">
           {colors.map((c) => (
             <button
               type="button"
+              role="radio"
               class="filter-chip flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
               data-filter-type="color"
               data-filter-value={c.value}
-              aria-pressed="false"
+              aria-checked="false"
             >
               <span class="h-2.5 w-2.5 rounded-full" style={`background:${c.swatch}`}></span>
               {c.label}
@@ -45,15 +46,16 @@ const peopleOptions = [
 
       <!-- 人数・構図 -->
       <div>
-        <p class="mb-2 text-xs text-inkdim">人数・構図で探す</p>
-        <div class="flex flex-wrap gap-2" id="people-filters" role="group">
+        <p class="mb-2 text-xs text-inkdim">人数・構図で探す（1つだけ選べます）</p>
+        <div class="flex flex-wrap gap-2" id="people-filters" role="radiogroup">
           {peopleOptions.map((p) => (
             <button
               type="button"
+              role="radio"
               class="filter-chip rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
               data-filter-type="people"
               data-filter-value={p.value}
-              aria-pressed="false"
+              aria-checked="false"
             >
               {p.label}
             </button>
@@ -73,7 +75,6 @@ const peopleOptions = [
                 class="filter-chip rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
                 data-filter-type="tag"
                 data-filter-value={tag}
-                aria-pressed="false"
                 aria-checked="false"
               >
                 {tag}

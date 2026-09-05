@@ -3,7 +3,9 @@
   "author": "ずいの/ザシマ",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4826/9784065364826_1_2.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18092243%2F",
-  "mainColor": "pink",
+  "mainColor": [
+    "pink"
+  ],
   "peopleCount": "duo",
   "tags": [],
   "description": "昔のアニメ「ラビットポートレイト」に影響を受け、強くてカワイイ女の子になる！と決意した主人公・うさぽは、行き場を失い、闇と病みを抱える少女たちを救うべく立ち上がる！極限状況で繰り広げられる「ゲーム」で、人間の本性が明らかにしてゆく‥‥！悩めるキッズたちによる、ダークでキュートな極限バトル！",

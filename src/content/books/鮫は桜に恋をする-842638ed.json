@@ -3,7 +3,9 @@
   "author": "涼",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/9762/9784861239762_1_3.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F17377780%2F",
-  "mainColor": "white",
+  "mainColor": [
+    "white"
+  ],
   "peopleCount": "duo",
   "tags": [],
   "description": "「なんで俺がこんな目に！」\n\n平穏な日々を送っていた桜木 淳は\n校内でヤバイと噂のヤンキー鮫島 理人に目をつけられる。\n電車の中で絡まれたり追いかけられたり、ただひたすら怯えていたが\n鮫島から“好きだ”と告白され更に戸惑ってしまう。\n揶揄われていると困り果てる桜木だが、どうやら鮫島は本気のようで…？",

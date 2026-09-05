@@ -3,7 +3,9 @@
   "author": "美山薫子",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/7242/9784796417242_1_3.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18122052%2F",
-  "mainColor": "white",
+  "mainColor": [
+    "white"
+  ],
   "peopleCount": "duo",
   "tags": [],
   "description": "美人だけど誰とも本気の恋をしたことがなかった冴と面食いでヤリチンの大学生・明仁は、セフレを経て恋人になり、順調に交際している。冴は明仁が以前と比べかなり心を開いてくれていることに喜びを実感する日々。ただ、時折家族の話題になると明仁の表情が曇ることが気にかかっていた。実は明仁には、実家を嫌悪する事情があり…？",

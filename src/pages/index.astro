@@ -45,12 +45,14 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
 </Layout>
 
 <script>
+  // 色・人数・タグはいずれも単一選択（ラジオボタン）方式。
+  // 複数選択すると該当0件になりがちなため、1グループにつき1つだけ選べる。
   type FilterType = 'color' | 'people' | 'tag';
 
-  const active: Record<FilterType, Set<string>> = {
-    color: new Set(),
-    people: new Set(),
-    tag: new Set(),
+  const active: Record<FilterType, string | null> = {
+    color: null,
+    people: null,
+    tag: null,
   };
 
   const chips = document.querySelectorAll<HTMLButtonElement>('.filter-chip');
@@ -64,14 +66,14 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
     let visibleCount = 0;
 
     cards.forEach((card) => {
-      const cardColor = card.dataset.color ?? '';
+      // mainColorは最大2色登録されているため、いずれか一致すればOK
+      const cardColors = (card.dataset.color ?? '').split(',').filter(Boolean);
       const cardPeople = card.dataset.people ?? '';
       const cardTags = (card.dataset.tags ?? '').split(',').filter(Boolean);
 
-      const colorOk = active.color.size === 0 || active.color.has(cardColor);
-      const peopleOk = active.people.size === 0 || active.people.has(cardPeople);
-      const tagOk =
-        active.tag.size === 0 || [...active.tag].every((t) => cardTags.includes(t));
+      const colorOk = !active.color || cardColors.includes(active.color);
+      const peopleOk = !active.people || cardPeople === active.people;
+      const tagOk = !active.tag || cardTags.includes(active.tag);
 
       const visible = colorOk && peopleOk && tagOk;
       const li = card.closest('li');
@@ -84,53 +86,37 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
     if (grid) grid.classList.toggle('hidden', visibleCount === 0);
   }
 
+  function setChipState(chip: HTMLButtonElement, checked: boolean) {
+    chip.setAttribute('aria-checked', String(checked));
+    chip.classList.toggle('border-wine', checked);
+    chip.classList.toggle('text-ink', checked);
+    chip.classList.toggle('bg-surface2', checked);
+  }
+
   chips.forEach((chip) => {
     chip.addEventListener('click', () => {
       const type = chip.dataset.filterType as FilterType | undefined;
       const value = chip.dataset.filterValue;
       if (!type || !value) return;
 
-      const isActive = chip.getAttribute('aria-pressed') === 'true';
+      const isActive = chip.getAttribute('aria-checked') === 'true';
 
-      // タグは絞り込んでも重複する本が少ないため単一選択にする
-      // （同時に2つ以上選ぶと該当0件になりがちなため）
-      if (type === 'tag' && !isActive) {
-        chips.forEach((otherChip) => {
-          if (otherChip.dataset.filterType === 'tag' && otherChip !== chip) {
-            otherChip.setAttribute('aria-pressed', 'false');
-            otherChip.setAttribute('aria-checked', 'false');
-            otherChip.classList.remove('border-wine', 'text-ink', 'bg-surface2');
-          }
-        });
-        active.tag.clear();
-      }
+      // 同じグループの他のチップは解除する（ラジオボタン挙動）
+      chips.forEach((otherChip) => {
+        if (otherChip.dataset.filterType === type && otherChip !== chip) {
+          setChipState(otherChip, false);
+        }
+      });
 
-      chip.setAttribute('aria-pressed', String(!isActive));
-      if (chip.getAttribute('role') === 'radio') {
-        chip.setAttribute('aria-checked', String(!isActive));
-      }
-      chip.classList.toggle('border-wine', !isActive);
-      chip.classList.toggle('text-ink', !isActive);
-      chip.classList.toggle('bg-surface2', !isActive);
-
-      if (isActive) {
-        active[type].delete(value);
-      } else {
-        active[type].add(value);
-      }
+      setChipState(chip, !isActive);
+      active[type] = isActive ? null : value;
       applyFilters();
     });
   });
 
   clearBtn?.addEventListener('click', () => {
-    (Object.keys(active) as FilterType[]).forEach((type) => active[type].clear());
-    chips.forEach((chip) => {
-      chip.setAttribute('aria-pressed', 'false');
-      if (chip.getAttribute('role') === 'radio') {
-        chip.setAttribute('aria-checked', 'false');
-      }
-      chip.classList.remove('border-wine', 'text-ink', 'bg-surface2');
-    });
+    (Object.keys(active) as FilterType[]).forEach((type) => { active[type] = null; });
+    chips.forEach((chip) => setChipState(chip, false));
     applyFilters();
   });
 

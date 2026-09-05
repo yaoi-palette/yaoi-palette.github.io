@@ -3,7 +3,9 @@
   "author": "理原",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/9232/9784866539232_1_3.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18329585%2F",
-  "mainColor": "white",
+  "mainColor": [
+    "white"
+  ],
   "peopleCount": "duo",
   "tags": [],
   "description": "頼まれたら断れないたちの花之木は、転属してきた影森の教育係に指名される。\n一癖も二癖もある影森に四苦八苦する花之木だけど、ある出来事をきっかけに盛大になつかれ、そのまま「好き」だと告白までされてしまう！\nなんとか断ろうとするも、影森の押しの強さに負け、気づけばホテルで一夜を過ごし恋人になっていて…!?",

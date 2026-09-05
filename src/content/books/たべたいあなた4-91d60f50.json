@@ -3,7 +3,9 @@
   "author": "七ノ日",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/6840/9784434366840_1_3.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F18353814%2F",
-  "mainColor": "white",
+  "mainColor": [
+    "white"
+  ],
   "peopleCount": "group",
   "tags": [
     "溺愛",

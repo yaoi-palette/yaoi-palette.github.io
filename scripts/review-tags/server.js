@@ -42,7 +42,7 @@ async function listBooks() {
       description: data.description ?? '',
       price: data.price,
       publishedDate: data.publishedDate,
-      mainColor: data.mainColor ?? 'pink',
+      mainColor: Array.isArray(data.mainColor) ? data.mainColor : [data.mainColor ?? 'pink'],
       peopleCount: data.peopleCount ?? 'duo',
       tags: Array.isArray(data.tags) ? data.tags : [],
       memo: data.memo ?? '',
@@ -58,7 +58,7 @@ async function saveBook(filename, patch) {
   const data = JSON.parse(await readFile(filePath, 'utf-8'));
 
   if (Array.isArray(patch.tags)) data.tags = patch.tags;
-  if (typeof patch.mainColor === 'string') data.mainColor = patch.mainColor;
+  if (Array.isArray(patch.mainColor) && patch.mainColor.length > 0) data.mainColor = patch.mainColor;
   if (typeof patch.peopleCount === 'string') data.peopleCount = patch.peopleCount;
 
   if (patch.confirmed) {

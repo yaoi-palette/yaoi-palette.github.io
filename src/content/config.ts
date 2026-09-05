@@ -22,7 +22,8 @@ const booksCollection = defineCollection({
     coverUrl: z.string().url(),
     // 楽天Koboアフィリエイトリンク（本文中では実キーを含めず、id を .env 側で付与する運用を推奨）
     affiliateUrl: z.string().url(),
-    mainColor: mainColorEnum,
+    // 表紙の主要カラーは最大2色まで登録できる（絞り込みは1色ずつ選択する運用）
+    mainColor: z.array(mainColorEnum).min(1).max(2),
     peopleCount: peopleCountEnum,
     // 属性タグ: 「スパダリ」「執着」「オフィスラブ」などジャンルの慣用タグ
     tags: z.array(z.string()).default([]),

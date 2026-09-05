@@ -4,6 +4,7 @@ import Layout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import AffiliateButton from '../../components/AffiliateButton.astro';
+import { slugify } from '../../lib/slug';
 
 export async function getStaticPaths() {
   const books = await getCollection('books');
@@ -34,6 +35,7 @@ const colorLabel: Record<string, string> = {
   white: '白',
   red: '赤',
 };
+const authorHref = `/authors/${slugify(author)}/`;
 ---
 
 <Layout title={`${title} - yaoi-palette`} description={description} image={coverUrl}>
@@ -50,12 +52,14 @@ const colorLabel: Record<string, string> = {
 
       <div>
         <h1 class="font-display text-2xl leading-snug text-ink text-balance sm:text-3xl">{title}</h1>
-        <p class="mt-2 text-sm text-inkdim">{author}</p>
+        <a href={authorHref} class="mt-2 inline-block text-sm text-inkdim hover:text-wine hover:underline">
+          {author}
+        </a>
 
         <dl class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs text-inkdim">
           <div class="flex items-center gap-1.5">
             <dt>色</dt>
-            <dd class="text-ink">{colorLabel[mainColor]}</dd>
+            <dd class="text-ink">{mainColor.map((c) => colorLabel[c]).join('・')}</dd>
           </div>
           <div class="flex items-center gap-1.5">
             <dt>人数</dt>

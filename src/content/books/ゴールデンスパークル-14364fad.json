@@ -3,7 +3,9 @@
   "author": "鈴丸 みんた",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/4241/9784834264241.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F15698565%2F",
-  "mainColor": "white",
+  "mainColor": [
+    "white"
+  ],
   "peopleCount": "duo",
   "tags": [
     "学園"

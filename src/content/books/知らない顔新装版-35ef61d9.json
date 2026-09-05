@@ -3,7 +3,9 @@
   "author": "日高ショーコ",
   "coverUrl": "https://thumbnail.image.rakuten.co.jp/@0_mall/book/cabinet/8406/9784344838406.jpg?_ex=800x800",
   "affiliateUrl": "https://hb.afl.rakuten.co.jp/hgc/g00q0727.pf2db0c6.g00q0727.pf2dcdbf/?pc=https%3A%2F%2Fbooks.rakuten.co.jp%2Frb%2F14484676%2F",
-  "mainColor": "white",
+  "mainColor": [
+    "white"
+  ],
   "peopleCount": "duo",
   "tags": [],
   "description": "日高ショーコ人気作品がカバー・口絵描き下ろし新装版で登場！！話題作「初恋のひと」の続編未収録作など2編を収録！！",
