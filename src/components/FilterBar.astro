@@ -21,8 +21,8 @@ const peopleOptions = [
 ];
 ---
 
-<section aria-label="絞り込み" class="border-b border-line bg-stage/60">
-  <div class="mx-auto max-w-6xl px-5 py-5 sm:px-8">
+<section id="filter-bar" aria-label="絞り込み" class="border-b border-line bg-surface2/60">
+  <div class="w-full px-4 py-5 sm:px-6 lg:px-10">
     <div class="flex flex-col gap-4">
       <!-- Main Color -->
       <div>
@@ -94,3 +94,14 @@ const peopleOptions = [
     </div>
   </div>
 </section>
+
+<style>
+  @media (max-width: 639px) {
+    #filter-bar {
+      display: none;
+    }
+    #filter-bar.is-open {
+      display: block;
+    }
+  }
+</style>

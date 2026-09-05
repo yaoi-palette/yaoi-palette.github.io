@@ -1,20 +1,61 @@
 ---
 interface Props {
   count?: number;
+  showFilterToggle?: boolean;
 }
-const { count } = Astro.props;
+const { count, showFilterToggle = false } = Astro.props;
 ---
 
-<header class="sticky top-0 z-30 border-b border-line bg-stage/90 backdrop-blur">
-  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
-    <a href="/" class="group flex items-baseline gap-2">
-      <span class="font-display text-xl tracking-wide text-ink sm:text-2xl">積み本、開く。</span>
-      <span class="hidden text-xs text-inkdim sm:inline">a BL bookshelf</span>
+<header class="sticky top-0 z-30 border-b border-line bg-stage">
+  <div class="flex w-full items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4 lg:px-10">
+    <a href="/" class="flex shrink-0 items-center">
+      <img
+        src="/img/web-logo.png"
+        alt="yaoi-palette"
+        class="h-7 w-auto sm:h-9"
+        width="956"
+        height="320"
+      />
     </a>
-    {count !== undefined && (
-      <p class="text-sm text-inkdim">
-        <span class="text-ink">{count}</span> 冊を収蔵
-      </p>
-    )}
+
+    <div class="flex items-center gap-4">
+      {count !== undefined && (
+        <p class="hidden text-sm text-inkdim sm:block">
+          <span class="text-ink">{count}</span> 冊を収蔵
+        </p>
+      )}
+
+      {showFilterToggle && (
+        <button
+          type="button"
+          id="filter-toggle-btn"
+          aria-expanded="false"
+          aria-controls="filter-bar"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-wine sm:hidden"
+        >
+          <span class="sr-only">絞り込みメニューを開く</span>
+          <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
+            <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="hidden h-5 w-5">
+            <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </button>
+      )}
+    </div>
   </div>
 </header>
+
+<script>
+  const btn = document.getElementById('filter-toggle-btn');
+  const filterBar = document.getElementById('filter-bar');
+  const iconOpen = document.getElementById('icon-open');
+  const iconClose = document.getElementById('icon-close');
+
+  btn?.addEventListener('click', () => {
+    const isOpen = filterBar?.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', String(!!isOpen));
+    iconOpen?.classList.toggle('hidden', !!isOpen);
+    iconClose?.classList.toggle('hidden', !isOpen);
+  });
+</script>

@@ -4,14 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        stage: '#16141A',      // ギャラリーの背景（暗いステージ）
-        surface: '#211D27',    // カード面
-        surface2: '#2A2531',   // ホバー時など一段明るい面
-        ink: '#F1EDE7',        // 主テキスト
-        inkdim: '#B9B2C2',     // 副テキスト
-        wine: '#B4485F',       // メインアクセント（表紙が映える深いローズ）
+        stage: '#FFFFFF',      // ギャラリーの背景（白）
+        surface: '#FFFFFF',    // カード面
+        surface2: '#F7F1F3',   // ホバー時など一段トーンを落とした面
+        ink: '#231F29',        // 主テキスト
+        inkdim: '#8A8090',     // 副テキスト
+        wine: '#B4485F',       // メインアクセント（ロゴのハートと同系色）
         gold: '#C9A227',       // サブアクセント（タグ・価格など）
-        line: '#39323F',       // 罫線
+        line: '#E8E2E6',       // 罫線
       },
       fontFamily: {
         display: ['"Shippori Mincho"', 'serif'],

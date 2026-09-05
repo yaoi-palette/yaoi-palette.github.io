@@ -18,16 +18,16 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
 ---
 
 <Layout title="積み本、開く。 - BL本棚ギャラリー">
-  <Header count={books.length} />
+  <Header count={books.length} showFilterToggle />
   <FilterBar tags={allTags} />
 
-  <main class="mx-auto max-w-6xl px-5 py-8 sm:px-8">
+  <main class="w-full px-4 py-8 sm:px-6 lg:px-10">
     {books.length === 0 ? (
       <p class="py-24 text-center text-inkdim">まだ本が登録されていません。</p>
     ) : (
       <ul
         id="book-grid"
-        class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
+        class="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5 lg:gap-6 xl:grid-cols-6 2xl:grid-cols-7"
       >
         {books.map((book) => (
           <li>
