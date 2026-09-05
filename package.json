@@ -11,7 +11,8 @@
     "astro": "astro",
     "extract-titles": "node scripts/extract_titles.js",
     "fetch-kobo": "node --env-file-if-exists=.env scripts/fetch_kobo_data.js",
-    "auto-tag": "node scripts/auto_tag.js"
+    "auto-tag": "node scripts/auto_tag.js",
+    "review-tags": "node scripts/review-tags/server.js"
   },
   "dependencies": {
     "astro": "^4.16.0",
