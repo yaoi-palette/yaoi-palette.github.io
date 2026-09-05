@@ -45,10 +45,13 @@ const TAG_RULES = [
   ['婚約・政略結婚', /婚約|政略結婚|見合い/],
 ];
 
+const MAX_TAGS = 3; // トップページに常時表示する運用のため上限を設ける
+
 function inferTags(text) {
   const tags = [];
   for (const [tag, pattern] of TAG_RULES) {
     if (pattern.test(text)) tags.push(tag);
+    if (tags.length >= MAX_TAGS) break;
   }
   return tags;
 }

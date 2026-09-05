@@ -54,7 +54,7 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
   };
 
   const chips = document.querySelectorAll<HTMLButtonElement>('.filter-chip');
-  const cards = document.querySelectorAll<HTMLAnchorElement>('.book-card');
+  const cards = document.querySelectorAll<HTMLElement>('.book-card');
   const resultCount = document.getElementById('result-count');
   const emptyState = document.getElementById('empty-state');
   const grid = document.getElementById('book-grid');
@@ -91,7 +91,24 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
       if (!type || !value) return;
 
       const isActive = chip.getAttribute('aria-pressed') === 'true';
+
+      // タグは絞り込んでも重複する本が少ないため単一選択にする
+      // （同時に2つ以上選ぶと該当0件になりがちなため）
+      if (type === 'tag' && !isActive) {
+        chips.forEach((otherChip) => {
+          if (otherChip.dataset.filterType === 'tag' && otherChip !== chip) {
+            otherChip.setAttribute('aria-pressed', 'false');
+            otherChip.setAttribute('aria-checked', 'false');
+            otherChip.classList.remove('border-wine', 'text-ink', 'bg-surface2');
+          }
+        });
+        active.tag.clear();
+      }
+
       chip.setAttribute('aria-pressed', String(!isActive));
+      if (chip.getAttribute('role') === 'radio') {
+        chip.setAttribute('aria-checked', String(!isActive));
+      }
       chip.classList.toggle('border-wine', !isActive);
       chip.classList.toggle('text-ink', !isActive);
       chip.classList.toggle('bg-surface2', !isActive);
@@ -109,6 +126,9 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
     (Object.keys(active) as FilterType[]).forEach((type) => active[type].clear());
     chips.forEach((chip) => {
       chip.setAttribute('aria-pressed', 'false');
+      if (chip.getAttribute('role') === 'radio') {
+        chip.setAttribute('aria-checked', 'false');
+      }
       chip.classList.remove('border-wine', 'text-ink', 'bg-surface2');
     });
     applyFilters();

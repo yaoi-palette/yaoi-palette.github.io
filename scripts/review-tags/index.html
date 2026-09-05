@@ -175,6 +175,7 @@ const KNOWN_TAGS = [
   '異世界・転生','オメガバース','獣人','ヤクザ','学園','王道ファンタジー',
   '医療系','刑事・警察','芸能・アイドル','契約・偽装関係','婚約・政略結婚',
 ];
+const MAX_TAGS = 3; // トップページに常時表示する運用のため上限を設ける
 const COLORS = [
   ['pink', '#e78ba8'], ['black', '#333333'], ['blue', '#5b8ad1'],
   ['yellow', '#e0c53f'], ['green', '#5fa876'], ['white', '#f3f3f3'], ['red', '#c94f4f'],
@@ -284,9 +285,17 @@ function render() {
     chip.className = 'tag-chip' + (currentTags.has(tag) ? ' on' : '');
     chip.textContent = tag;
     chip.onclick = () => {
-      if (currentTags.has(tag)) currentTags.delete(tag);
-      else currentTags.add(tag);
-      chip.classList.toggle('on');
+      if (currentTags.has(tag)) {
+        currentTags.delete(tag);
+        chip.classList.remove('on');
+      } else {
+        if (currentTags.size >= MAX_TAGS) {
+          alert(`タグは${MAX_TAGS}つまでです。外してから追加してください。`);
+          return;
+        }
+        currentTags.add(tag);
+        chip.classList.add('on');
+      }
     };
     tagList.appendChild(chip);
   });
@@ -294,6 +303,10 @@ function render() {
   document.getElementById('customTagInput').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.target.value.trim()) {
       const tag = e.target.value.trim();
+      if (currentTags.size >= MAX_TAGS) {
+        alert(`タグは${MAX_TAGS}つまでです。外してから追加してください。`);
+        return;
+      }
       currentTags.add(tag);
       e.target.value = '';
       render();

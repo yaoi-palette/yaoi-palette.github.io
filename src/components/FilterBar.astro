@@ -64,15 +64,17 @@ const peopleOptions = [
       <!-- 属性タグ -->
       {tags.length > 0 && (
         <div>
-          <p class="mb-2 text-xs text-inkdim">タグで探す</p>
-          <div class="flex flex-wrap gap-2" id="tag-filters" role="group">
+          <p class="mb-2 text-xs text-inkdim">タグで探す（1つだけ選べます）</p>
+          <div class="flex flex-wrap gap-2" id="tag-filters" role="radiogroup">
             {tags.map((tag) => (
               <button
                 type="button"
+                role="radio"
                 class="filter-chip rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
                 data-filter-type="tag"
                 data-filter-value={tag}
                 aria-pressed="false"
+                aria-checked="false"
               >
                 {tag}
               </button>

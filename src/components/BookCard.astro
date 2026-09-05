@@ -1,28 +1,23 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { slugify } from '../lib/slug';
 
 interface Props {
   book: CollectionEntry<'books'>;
 }
 const { book } = Astro.props;
 const { title, author, coverUrl, mainColor, peopleCount, tags } = book.data;
-
-const peopleLabel: Record<string, string> = {
-  solo: '1人',
-  duo: '2人',
-  group: '3人以上',
-};
+const authorHref = `/authors/${slugify(author)}/`;
 ---
 
-<a
-  href={`/books/${book.id}/`}
-  class="book-card group relative block overflow-hidden rounded-xl border border-line bg-surface shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-wine/10"
+<div
+  class="book-card group overflow-hidden rounded-xl border border-line bg-surface shadow-sm transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-lg hover:shadow-wine/10"
   data-color={mainColor}
   data-people={peopleCount}
   data-tags={tags.join(',')}
   data-title={title}
 >
-  <div class="aspect-cover w-full overflow-hidden">
+  <a href={`/books/${book.id}/`} class="block aspect-cover w-full overflow-hidden">
     <img
       src={coverUrl}
       alt={`『${title}』の表紙`}
@@ -32,19 +27,24 @@ const peopleLabel: Record<string, string> = {
       width="450"
       height="600"
     />
-  </div>
+  </a>
 
-  <div
-    class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/90 via-black/10 to-transparent p-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
-  >
-    <p class="font-display text-sm leading-snug text-white text-balance">{title}</p>
-    <p class="mt-0.5 text-xs text-white/70">{author} ・ {peopleLabel[peopleCount]}</p>
+  <div class="p-2.5 sm:p-3">
+    <a href={`/books/${book.id}/`} class="block">
+      <p class="font-display text-sm leading-snug text-ink text-balance line-clamp-2">{title}</p>
+    </a>
+    <a
+      href={authorHref}
+      class="mt-1 inline-block text-xs text-inkdim hover:text-wine hover:underline"
+    >
+      {author}
+    </a>
     {tags.length > 0 && (
       <ul class="mt-2 flex flex-wrap gap-1">
         {tags.slice(0, 3).map((tag) => (
-          <li class="rounded-sm border border-white/30 px-1.5 py-0.5 text-[10px] text-white/80">{tag}</li>
+          <li class="rounded-sm border border-line px-1.5 py-0.5 text-[10px] text-inkdim">{tag}</li>
         ))}
       </ul>
     )}
   </div>
-</a>
+</div>
