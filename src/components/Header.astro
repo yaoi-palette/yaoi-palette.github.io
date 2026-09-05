@@ -7,19 +7,27 @@ interface Props {
 const { count, showFilterToggle = false, tags = [] } = Astro.props;
 
 const colors: { value: string; label: string; swatch: string }[] = [
-  { value: 'pink', label: 'ピンク', swatch: '#E58FA6' },
-  { value: 'red', label: '赤', swatch: '#B4485F' },
-  { value: 'black', label: '黒・ダーク', swatch: '#231F29' },
-  { value: 'blue', label: 'ブルー', swatch: '#3C7EA6' },
-  { value: 'yellow', label: '黄・オレンジ', swatch: '#D8A31A' },
-  { value: 'green', label: 'グリーン', swatch: '#5C8F60' },
-  { value: 'white', label: '白', swatch: '#E8E4DC' },
+  { value: 'pink', label: 'ピンク', swatch: 'linear-gradient(135deg, #F5C4D2, #E58FA6)' },
+  { value: 'red', label: '赤', swatch: 'linear-gradient(135deg, #D97E90, #B4485F)' },
+  { value: 'black', label: '黒・ダーク', swatch: 'linear-gradient(135deg, #4A4550, #231F29)' },
+  { value: 'blue', label: 'ブルー', swatch: 'linear-gradient(135deg, #7FB2D6, #3C7EA6)' },
+  { value: 'yellow', label: '黄・オレンジ', swatch: 'linear-gradient(135deg, #F0CC7A, #D8A31A)' },
+  { value: 'green', label: 'グリーン', swatch: 'linear-gradient(135deg, #8FC194, #5C8F60)' },
+  { value: 'white', label: '白', swatch: 'linear-gradient(135deg, #FFFFFF, #E8E4DC)' },
+  { value: 'brown', label: '茶色', swatch: 'linear-gradient(135deg, #C0997A, #6F4E37)' },
+  { value: 'other', label: 'その他', swatch: 'conic-gradient(from 0deg, #E58FA6, #D8A31A, #5C8F60, #3C7EA6, #B4485F, #E58FA6)' },
 ];
 
 const peopleOptions = [
   { value: 'solo', label: '1人' },
   { value: 'duo', label: '2人' },
   { value: 'group', label: '3人以上' },
+];
+
+const fontOptions = [
+  { value: 'mincho', label: '明朝' },
+  { value: 'gothic', label: 'ゴシック' },
+  { value: 'tegaki', label: '手書き' },
 ];
 ---
 
@@ -102,6 +110,37 @@ const peopleOptions = [
                 aria-checked="false"
               >
                 {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- フォント -->
+        <div class="filter-dropdown relative">
+          <button
+            type="button"
+            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink sm:inline-flex"
+            data-target="font-panel"
+          >
+            フォントで探す
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <p class="mb-2 text-xs text-inkdim sm:hidden">フォントで探す（1つだけ選べます）</p>
+          <div
+            id="font-panel"
+            class="dropdown-panel flex flex-wrap gap-2 sm:absolute sm:left-0 sm:top-full sm:z-30 sm:mt-2 sm:w-48 sm:rounded-lg sm:border sm:border-line sm:bg-surface sm:p-3 sm:shadow-lg"
+            role="radiogroup"
+          >
+            {fontOptions.map((f) => (
+              <button
+                type="button"
+                role="radio"
+                class="filter-chip rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
+                data-filter-type="font"
+                data-filter-value={f.value}
+                aria-checked="false"
+              >
+                {f.label}
               </button>
             ))}
           </div>

@@ -206,10 +206,18 @@ function normalizeTag(raw) {
   return TAG_SYNONYMS[raw] ?? raw;
 }
 const COLORS = [
-  ['pink', '#e78ba8'], ['black', '#333333'], ['blue', '#5b8ad1'],
-  ['yellow', '#e0c53f'], ['green', '#5fa876'], ['white', '#f3f3f3'], ['red', '#c94f4f'],
+  ['pink', 'linear-gradient(135deg,#f5c4d2,#e78ba8)'],
+  ['black', 'linear-gradient(135deg,#5a5560,#333333)'],
+  ['blue', 'linear-gradient(135deg,#8fc0e6,#5b8ad1)'],
+  ['yellow', 'linear-gradient(135deg,#f0dd8a,#e0c53f)'],
+  ['green', 'linear-gradient(135deg,#9fd0a5,#5fa876)'],
+  ['white', 'linear-gradient(135deg,#ffffff,#f3f3f3)'],
+  ['red', 'linear-gradient(135deg,#e08a94,#c94f4f)'],
+  ['brown', 'linear-gradient(135deg,#c0997a,#6f4e37)'],
+  ['other', 'conic-gradient(from 0deg,#e78ba8,#e0c53f,#5fa876,#5b8ad1,#c94f4f,#e78ba8)'],
 ];
 const PEOPLE = [['solo','ソロ'], ['duo','デュオ(2人)'], ['group','グループ']];
+const FONTS = [['mincho','明朝'], ['gothic','ゴシック'], ['tegaki','手書き']];
 
 let books = [];
 let currentIndex = 0;
@@ -276,6 +284,11 @@ function render() {
         </fieldset>
 
         <fieldset>
+          <legend>fontStyle（任意）</legend>
+          <div class="radio-row" id="fontRadios"></div>
+        </fieldset>
+
+        <fieldset>
           <legend>tags</legend>
           <div class="tag-list" id="tagList"></div>
           <div class="custom-tag-row">
@@ -326,8 +339,20 @@ function render() {
     peopleRadios.appendChild(el);
   });
 
+  const fontRadios = document.getElementById('fontRadios');
+  const fontOptionsWithUnset = [['', '未設定'], ...FONTS];
+  fontOptionsWithUnset.forEach(([key, label]) => {
+    const el = document.createElement('label');
+    const checked = (book.fontStyle || '') === key;
+    el.innerHTML = `<input type="radio" name="fontStyle" value="${key}" ${checked ? 'checked' : ''}/> ${label}`;
+    fontRadios.appendChild(el);
+  });
+
   const tagList = document.getElementById('tagList');
-  const allTagNames = Array.from(new Set([...KNOWN_TAGS, ...currentTags]));
+  // サイト側のタグ絞り込みは実データから動的に生成されるため、ツールの候補も
+  // 「これまでに使われた全タグ」+「辞書」+「この本のタグ」を合算して常に一致させる
+  const allUsedTags = books.flatMap(b => b.tags || []);
+  const allTagNames = Array.from(new Set([...KNOWN_TAGS, ...allUsedTags, ...currentTags])).sort((a, b) => a.localeCompare(b, 'ja'));
   allTagNames.forEach(tag => {
     const chip = document.createElement('span');
     chip.className = 'tag-chip' + (currentTags.has(tag) ? ' on' : '');
@@ -424,6 +449,7 @@ async function saveCurrent(book, advance) {
     tags: Array.from(currentTags),
     mainColor: Array.from(currentColors),
     peopleCount: getSelected('peopleCount'),
+    fontStyle: getSelected('fontStyle') ?? '',
     confirmed: true,
   };
   const res = await fetch(`/api/books/${encodeURIComponent(book.filename)}`, {

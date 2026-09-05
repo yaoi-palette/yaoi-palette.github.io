@@ -45,11 +45,12 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
 <script>
   // 色・人数・タグはいずれも単一選択（ラジオボタン）方式。
   // 複数選択すると該当0件になりがちなため、1グループにつき1つだけ選べる。
-  type FilterType = 'color' | 'people' | 'tag';
+  type FilterType = 'color' | 'people' | 'font' | 'tag';
 
   const active: Record<FilterType, string | null> = {
     color: null,
     people: null,
+    font: null,
     tag: null,
   };
 
@@ -67,13 +68,15 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
       // mainColorは最大2色登録されているため、いずれか一致すればOK
       const cardColors = (card.dataset.color ?? '').split(',').filter(Boolean);
       const cardPeople = card.dataset.people ?? '';
+      const cardFont = card.dataset.font ?? '';
       const cardTags = (card.dataset.tags ?? '').split(',').filter(Boolean);
 
       const colorOk = !active.color || cardColors.includes(active.color);
       const peopleOk = !active.people || cardPeople === active.people;
+      const fontOk = !active.font || cardFont === active.font;
       const tagOk = !active.tag || cardTags.includes(active.tag);
 
-      const visible = colorOk && peopleOk && tagOk;
+      const visible = colorOk && peopleOk && fontOk && tagOk;
       const li = card.closest('li');
       if (li) li.classList.toggle('hidden', !visible);
       if (visible) visibleCount += 1;

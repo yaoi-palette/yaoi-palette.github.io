@@ -44,6 +44,7 @@ async function listBooks() {
       publishedDate: data.publishedDate,
       mainColor: Array.isArray(data.mainColor) ? data.mainColor : [data.mainColor ?? 'pink'],
       peopleCount: data.peopleCount ?? 'duo',
+      fontStyle: data.fontStyle ?? '',
       tags: Array.isArray(data.tags) ? data.tags : [],
       memo: data.memo ?? '',
       needsReview: /要確認/.test(data.memo ?? ''),
@@ -60,6 +61,10 @@ async function saveBook(filename, patch) {
   if (Array.isArray(patch.tags)) data.tags = patch.tags;
   if (Array.isArray(patch.mainColor) && patch.mainColor.length > 0) data.mainColor = patch.mainColor;
   if (typeof patch.peopleCount === 'string') data.peopleCount = patch.peopleCount;
+  if (typeof patch.fontStyle === 'string') {
+    if (patch.fontStyle) data.fontStyle = patch.fontStyle;
+    else delete data.fontStyle;
+  }
 
   if (patch.confirmed) {
     data.memo = (data.memo ?? '')
