@@ -33,10 +33,55 @@
   header h1 { font-size: 16px; margin: 0; }
   .progress { font-size: 13px; color: var(--sub); }
   .filter-toggle { font-size: 13px; display: flex; align-items: center; gap: 6px; }
-  main {
-    max-width: 900px;
+  .layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    max-width: 1200px;
     margin: 24px auto;
     padding: 0 16px 80px;
+  }
+  .sidebar {
+    flex: 0 0 260px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    position: sticky;
+    top: 24px;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+  }
+  .sidebar-item:last-child { border-bottom: none; }
+  .sidebar-item:hover { background: #fdf5f8; }
+  .sidebar-item.current { background: var(--accent-soft); }
+  .sidebar-item img {
+    width: 28px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 3px;
+    flex: 0 0 28px;
+    background: #eee;
+  }
+  .sidebar-item .s-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sidebar-item .s-status { flex: 0 0 auto; font-size: 13px; }
+  main {
+    flex: 1;
+    min-width: 0;
   }
   .card {
     background: var(--card);
@@ -117,9 +162,12 @@
   <div class="progress" id="progress">読み込み中...</div>
 </header>
 
-<main id="main">
-  <div class="empty">読み込み中...</div>
-</main>
+<div class="layout">
+  <div class="sidebar" id="sidebar"></div>
+  <main id="main">
+    <div class="empty">読み込み中...</div>
+  </main>
+</div>
 
 <script>
 const KNOWN_TAGS = [
@@ -138,6 +186,7 @@ let currentIndex = 0;
 let currentTags = new Set();
 
 const mainEl = document.getElementById('main');
+const sidebarEl = document.getElementById('sidebar');
 const progressEl = document.getElementById('progress');
 const filterToggle = document.getElementById('filterToggle');
 
@@ -156,10 +205,12 @@ function render() {
   const list = visibleBooks();
   const total = books.length;
   const remaining = books.filter(b => b.needsReview).length;
-  progressEl.textContent = `要確認 ${remaining} / 全 ${total} 件`;
+  const confirmed = total - remaining;
+  progressEl.textContent = `確認済み ${confirmed} / 全 ${total} 件（表示中 ${Math.min(currentIndex + 1, list.length)} / ${list.length}）`;
 
   if (list.length === 0) {
     mainEl.innerHTML = '<div class="empty">🎉 対象の本がありません(すべて確認済みかも)</div>';
+    sidebarEl.innerHTML = '';
     return;
   }
   if (currentIndex >= list.length) currentIndex = list.length - 1;
@@ -167,6 +218,7 @@ function render() {
 
   const book = list[currentIndex];
   currentTags = new Set(book.tags || []);
+  renderSidebar(list, book);
 
   mainEl.innerHTML = `
     <div class="card">
@@ -253,12 +305,33 @@ function render() {
   document.getElementById('saveNextBtn').onclick = () => saveCurrent(book, true);
 }
 
+function renderSidebar(list, currentBook) {
+  sidebarEl.innerHTML = '';
+  list.forEach((b, i) => {
+    const row = document.createElement('div');
+    row.className = 'sidebar-item' + (b.filename === currentBook.filename ? ' current' : '');
+    row.innerHTML = `
+      <img src="${escapeAttr(b.coverUrl)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'" />
+      <span class="s-title">${escapeHtml(b.title)}</span>
+      <span class="s-status">${b.needsReview ? '🔲' : '✅'}</span>
+    `;
+    row.onclick = () => { currentIndex = i; render(); };
+    sidebarEl.appendChild(row);
+  });
+  const currentEl = sidebarEl.querySelector('.sidebar-item.current');
+  if (currentEl) currentEl.scrollIntoView({ block: 'nearest' });
+}
+
 function getSelected(name) {
   const el = document.querySelector(`input[name="${name}"]:checked`);
   return el ? el.value : undefined;
 }
 
 async function saveCurrent(book, advance) {
+  const listBefore = visibleBooks();
+  const posBefore = listBefore.findIndex(b => b.filename === book.filename);
+  const nextFilenameBefore = listBefore[posBefore + 1]?.filename;
+
   const patch = {
     tags: Array.from(currentTags),
     mainColor: getSelected('mainColor'),
@@ -279,7 +352,15 @@ async function saveCurrent(book, advance) {
   if (idxInAll !== -1) {
     books[idxInAll] = { ...books[idxInAll], ...updated, needsReview: /要確認/.test(updated.memo || '') };
   }
-  if (advance) render();
+
+  if (advance) {
+    // フィルターON時は確認済みになった本がリストから消えるため、
+    // 保存前に「次だったはずの本」のファイル名を覚えておき、それを基準に位置を求め直す
+    const listAfter = visibleBooks();
+    const idx = nextFilenameBefore ? listAfter.findIndex(b => b.filename === nextFilenameBefore) : -1;
+    currentIndex = idx !== -1 ? idx : Math.min(posBefore, listAfter.length - 1);
+    render();
+  }
 }
 
 filterToggle.addEventListener('change', () => { currentIndex = 0; render(); });
