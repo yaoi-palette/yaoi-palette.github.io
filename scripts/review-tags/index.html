@@ -152,6 +152,31 @@
   .empty { text-align: center; color: var(--sub); padding: 60px 0; }
   .memo { font-size: 11px; color: var(--sub); margin-top: 10px; }
   .saved-flash { color: #2a8a52; font-size: 12px; margin-left: 8px; }
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.4);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 16px;
+    overflow-y: auto;
+    z-index: 100;
+  }
+  .modal-backdrop[hidden] { display: none; }
+  .modal {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px;
+    width: 100%;
+    max-width: 560px;
+  }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .modal-header h2 { font-size: 16px; margin: 0; }
+  .isbn-row { display: flex; gap: 8px; }
+  .isbn-row input { flex: 1; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); font-size: 14px; }
+  .add-book-error { color: #c0392b; font-size: 12px; margin-top: 8px; }
+  .add-book-loading { color: var(--sub); font-size: 12px; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -162,6 +187,7 @@
     <input type="checkbox" id="filterToggle" checked />
     要確認のみ表示
   </label>
+  <button type="button" class="primary" id="openAddBookBtn">＋ 本を追加</button>
   <div class="progress" id="progress">読み込み中...</div>
 </header>
 
@@ -170,6 +196,24 @@
   <main id="main">
     <div class="empty">読み込み中...</div>
   </main>
+</div>
+
+<div class="modal-backdrop" id="addBookBackdrop" hidden>
+  <div class="modal">
+    <div class="modal-header">
+      <h2>本を追加</h2>
+      <button type="button" class="ghost" id="closeAddBookBtn">✕ 閉じる</button>
+    </div>
+
+    <div class="isbn-row">
+      <input type="text" id="isbnInput" placeholder="ISBN（13桁）を入力してEnterまたは検索" />
+      <button type="button" class="primary" id="lookupBtn">検索</button>
+    </div>
+    <p id="addBookError" class="add-book-error" hidden></p>
+    <p id="addBookLoading" class="add-book-loading" hidden>検索中...</p>
+
+    <div id="addBookPreview" hidden></div>
+  </div>
 </div>
 
 <script>
@@ -483,6 +527,232 @@ function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 function escapeAttr(s) { return escapeHtml(s); }
+
+// ------------------ 本を追加（ISBN検索） ------------------
+
+const addBookBackdrop = document.getElementById('addBookBackdrop');
+const isbnInput = document.getElementById('isbnInput');
+const addBookError = document.getElementById('addBookError');
+const addBookLoading = document.getElementById('addBookLoading');
+const addBookPreview = document.getElementById('addBookPreview');
+
+let pendingBook = null; // 検索で見つかった、まだ未保存の本のデータ
+let pendingColors = new Set();
+let pendingTags = new Set();
+
+function openAddBookModal() {
+  addBookBackdrop.hidden = false;
+  isbnInput.value = '';
+  addBookError.hidden = true;
+  addBookLoading.hidden = true;
+  addBookPreview.hidden = true;
+  addBookPreview.innerHTML = '';
+  pendingBook = null;
+  isbnInput.focus();
+}
+
+function closeAddBookModal() {
+  addBookBackdrop.hidden = true;
+}
+
+document.getElementById('openAddBookBtn').addEventListener('click', openAddBookModal);
+document.getElementById('closeAddBookBtn').addEventListener('click', closeAddBookModal);
+addBookBackdrop.addEventListener('click', (e) => {
+  if (e.target === addBookBackdrop) closeAddBookModal();
+});
+
+async function runLookup() {
+  const isbn = isbnInput.value.trim();
+  addBookError.hidden = true;
+  if (!isbn) return;
+
+  addBookLoading.hidden = false;
+  addBookPreview.hidden = true;
+  try {
+    const res = await fetch(`/api/lookup?isbn=${encodeURIComponent(isbn)}`);
+    const data = await res.json();
+    if (!res.ok) {
+      addBookError.textContent = data.error || '検索に失敗しました';
+      addBookError.hidden = false;
+      return;
+    }
+    pendingBook = data;
+    pendingColors = new Set(data.mainColor || []);
+    pendingTags = new Set(data.tags || []);
+    renderAddBookPreview();
+  } catch (err) {
+    addBookError.textContent = 'エラー: ' + err.message;
+    addBookError.hidden = false;
+  } finally {
+    addBookLoading.hidden = true;
+  }
+}
+
+document.getElementById('lookupBtn').addEventListener('click', runLookup);
+isbnInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') runLookup();
+});
+
+function renderAddBookPreview() {
+  const book = pendingBook;
+  addBookPreview.hidden = false;
+  addBookPreview.innerHTML = `
+    <div class="card" style="margin-top:14px;">
+      <div class="cover">
+        <img src="${escapeAttr(book.coverUrl)}" alt="" onerror="this.style.opacity=0.2" />
+      </div>
+      <div class="details">
+        <h2>${escapeHtml(book.title)}</h2>
+        <div class="author">${escapeHtml(book.author || '著者不明')}</div>
+        <div class="meta">${book.price ? '¥' + book.price : ''} ${book.publishedDate ? ' / ' + book.publishedDate : ''}</div>
+        <div class="description">${escapeHtml(book.description || '(あらすじなし)')}</div>
+
+        <fieldset>
+          <legend>mainColor（最大2色）</legend>
+          <div class="swatches" id="addColorSwatches"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>peopleCount</legend>
+          <div class="radio-row" id="addPeopleRadios"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>fontStyle（任意）</legend>
+          <div class="radio-row" id="addFontRadios"></div>
+        </fieldset>
+
+        <fieldset>
+          <legend>tags（最大${MAX_TAGS}）</legend>
+          <div class="tag-list" id="addTagList"></div>
+          <div class="custom-tag-row">
+            <input type="text" id="addCustomTagInput" placeholder="自由入力タグを追加してEnter" />
+          </div>
+        </fieldset>
+
+        <div class="actions">
+          <button type="button" class="primary" id="registerBookBtn">この本を登録する</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const colorSwatches = document.getElementById('addColorSwatches');
+  COLORS.forEach(([key, hex]) => {
+    const label = document.createElement('label');
+    label.className = 'swatch' + (pendingColors.has(key) ? ' on' : '');
+    label.innerHTML = `<input type="checkbox" value="${key}" ${pendingColors.has(key) ? 'checked' : ''}/><span class="dot" style="background:${hex}"></span>${key}`;
+    const checkbox = label.querySelector('input');
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        if (pendingColors.size >= MAX_COLORS) {
+          checkbox.checked = false;
+          alert(`mainColorは${MAX_COLORS}つまでです。外してから追加してください。`);
+          return;
+        }
+        pendingColors.add(key);
+        label.classList.add('on');
+      } else {
+        pendingColors.delete(key);
+        label.classList.remove('on');
+      }
+    });
+    colorSwatches.appendChild(label);
+  });
+
+  const peopleRadios = document.getElementById('addPeopleRadios');
+  PEOPLE.forEach(([key, label]) => {
+    const el = document.createElement('label');
+    el.innerHTML = `<input type="radio" name="addPeopleCount" value="${key}" ${book.peopleCount === key ? 'checked' : ''}/> ${label}`;
+    peopleRadios.appendChild(el);
+  });
+
+  const fontRadios = document.getElementById('addFontRadios');
+  [['', '未設定'], ...FONTS].forEach(([key, label]) => {
+    const el = document.createElement('label');
+    const checked = (book.fontStyle || '') === key;
+    el.innerHTML = `<input type="radio" name="addFontStyle" value="${key}" ${checked ? 'checked' : ''}/> ${label}`;
+    fontRadios.appendChild(el);
+  });
+
+  const tagList = document.getElementById('addTagList');
+  const allUsedTags = books.flatMap(b => b.tags || []);
+  const allTagNames = Array.from(new Set([...KNOWN_TAGS, ...allUsedTags, ...pendingTags])).sort((a, b) => a.localeCompare(b, 'ja'));
+  allTagNames.forEach(tag => {
+    const chip = document.createElement('span');
+    chip.className = 'tag-chip' + (pendingTags.has(tag) ? ' on' : '');
+    chip.textContent = tag;
+    chip.onclick = () => {
+      if (pendingTags.has(tag)) {
+        pendingTags.delete(tag);
+        chip.classList.remove('on');
+      } else {
+        if (pendingTags.size >= MAX_TAGS) {
+          alert(`タグは${MAX_TAGS}つまでです。外してから追加してください。`);
+          return;
+        }
+        pendingTags.add(tag);
+        chip.classList.add('on');
+      }
+    };
+    tagList.appendChild(chip);
+  });
+
+  document.getElementById('addCustomTagInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.value.trim()) {
+      const tag = normalizeTag(e.target.value.trim());
+      if (pendingTags.size >= MAX_TAGS) {
+        alert(`タグは${MAX_TAGS}つまでです。外してから追加してください。`);
+        return;
+      }
+      pendingTags.add(tag);
+      e.target.value = '';
+      renderAddBookPreview();
+    }
+  });
+
+  document.getElementById('registerBookBtn').addEventListener('click', registerPendingBook);
+}
+
+function getAddSelected(name) {
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? el.value : undefined;
+}
+
+async function registerPendingBook() {
+  if (pendingColors.size === 0) {
+    alert('mainColorを少なくとも1つ選んでください。');
+    return;
+  }
+  const payload = {
+    ...pendingBook,
+    mainColor: Array.from(pendingColors),
+    peopleCount: getAddSelected('addPeopleCount') || pendingBook.peopleCount,
+    fontStyle: getAddSelected('addFontStyle') ?? '',
+    tags: Array.from(pendingTags),
+  };
+
+  const res = await fetch('/api/books', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    alert('登録に失敗しました: ' + (data.error || res.status));
+    return;
+  }
+  const saved = await res.json();
+  books.push({ ...saved, needsReview: /要確認/.test(saved.memo || '') });
+
+  // 続けて次の本を登録できるよう、入力欄をクリアして開いたままにする
+  isbnInput.value = '';
+  addBookPreview.hidden = true;
+  addBookPreview.innerHTML = '';
+  pendingBook = null;
+  isbnInput.focus();
+  render();
+}
 
 loadBooks();
 </script>
