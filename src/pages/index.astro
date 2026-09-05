@@ -17,7 +17,7 @@ const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
 );
 ---
 
-<Layout title="積み本、開く。 - BL本棚ギャラリー">
+<Layout title="yaoi-palette - BL本棚ギャラリー">
   <Header count={books.length} showFilterToggle />
   <FilterBar tags={allTags} />
 

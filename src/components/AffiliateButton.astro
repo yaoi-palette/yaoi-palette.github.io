@@ -10,8 +10,8 @@ const { href, price } = Astro.props;
   href={href}
   target="_blank"
   rel="noopener noreferrer sponsored"
-  class="inline-flex items-center justify-center gap-2 rounded-sm bg-wine px-5 py-3 text-sm font-medium text-ink transition-colors hover:bg-wine/85"
+  class="inline-flex items-center justify-center gap-2 rounded-sm bg-[#BF0000] px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-[#a30000]"
 >
   楽天Koboで見る
-  {price !== undefined && <span class="text-inkdim/90">・{price.toLocaleString('ja-JP')}円〜</span>}
+  {price !== undefined && <span class="text-white/80">・{price.toLocaleString('ja-JP')}円〜</span>}
 </a>

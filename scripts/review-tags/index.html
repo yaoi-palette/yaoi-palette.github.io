@@ -176,6 +176,32 @@ const KNOWN_TAGS = [
   '医療系','刑事・警察','芸能・アイドル','契約・偽装関係','婚約・政略結婚',
 ];
 const MAX_TAGS = 3; // トップページに常時表示する運用のため上限を設ける
+
+// 似た意味の言葉を手入力しても既存タグに寄せ、同義タグが乱立しないようにする
+const TAG_SYNONYMS = {
+  '同居': '同棲',
+  '医療': '医療系',
+  '病院': '医療系',
+  'ドクター': '医療系',
+  '警察': '刑事・警察',
+  '刑事': '刑事・警察',
+  '極道': 'ヤクザ',
+  '任侠': 'ヤクザ',
+  'アイドル': '芸能・アイドル',
+  '芸能人': '芸能・アイドル',
+  '俳優': '芸能・アイドル',
+  '転生': '異世界・転生',
+  '異世界': '異世界・転生',
+  'ファンタジー': '王道ファンタジー',
+  '契約結婚': '契約・偽装関係',
+  '偽装結婚': '契約・偽装関係',
+  '偽装カップル': '契約・偽装関係',
+  '政略結婚': '婚約・政略結婚',
+  '見合い': '婚約・政略結婚',
+};
+function normalizeTag(raw) {
+  return TAG_SYNONYMS[raw] ?? raw;
+}
 const COLORS = [
   ['pink', '#e78ba8'], ['black', '#333333'], ['blue', '#5b8ad1'],
   ['yellow', '#e0c53f'], ['green', '#5fa876'], ['white', '#f3f3f3'], ['red', '#c94f4f'],
@@ -302,7 +328,7 @@ function render() {
 
   document.getElementById('customTagInput').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && e.target.value.trim()) {
-      const tag = e.target.value.trim();
+      const tag = normalizeTag(e.target.value.trim());
       if (currentTags.size >= MAX_TAGS) {
         alert(`タグは${MAX_TAGS}つまでです。外してから追加してください。`);
         return;
