@@ -2,13 +2,33 @@
 interface Props {
   count?: number;
   showFilterToggle?: boolean;
+  tags?: string[];
 }
-const { count, showFilterToggle = false } = Astro.props;
+const { count, showFilterToggle = false, tags = [] } = Astro.props;
+
+const colors: { value: string; label: string; swatch: string }[] = [
+  { value: 'pink', label: 'ピンク', swatch: '#E58FA6' },
+  { value: 'red', label: '赤', swatch: '#B4485F' },
+  { value: 'black', label: '黒・ダーク', swatch: '#231F29' },
+  { value: 'blue', label: 'ブルー', swatch: '#3C7EA6' },
+  { value: 'yellow', label: '黄・オレンジ', swatch: '#D8A31A' },
+  { value: 'green', label: 'グリーン', swatch: '#5C8F60' },
+  { value: 'white', label: '白', swatch: '#E8E4DC' },
+];
+
+const peopleOptions = [
+  { value: 'solo', label: '1人' },
+  { value: 'duo', label: '2人' },
+  { value: 'group', label: '3人以上' },
+];
 ---
 
 <header class="sticky top-0 z-30 border-b border-line bg-stage">
-  <div class="relative flex min-h-[72px] w-full items-center justify-end gap-4 px-4 py-3 sm:min-h-[84px] sm:px-6 sm:py-4 lg:min-h-[96px] lg:px-10">
-    <a href="/" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+  <div class="relative flex min-h-[72px] w-full items-center justify-end gap-4 px-4 py-3 sm:min-h-[84px] sm:justify-between sm:px-6 sm:py-4 lg:min-h-[96px] lg:px-10">
+    <a
+      href="/"
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 sm:static sm:left-auto sm:top-auto sm:order-first sm:translate-x-0 sm:translate-y-0"
+    >
       <img
         src="/img/web-logo.png"
         alt="yaoi-palette"
@@ -17,6 +37,121 @@ const { count, showFilterToggle = false } = Astro.props;
         height="320"
       />
     </a>
+
+    {showFilterToggle && (
+      <div
+        id="filter-bar"
+        aria-label="絞り込み"
+        class="hidden fixed inset-x-0 top-[72px] z-20 max-h-[calc(100vh-72px)] flex-col gap-4 overflow-y-auto border-b border-line bg-surface2 p-4 shadow-lg sm:static sm:top-auto sm:z-auto sm:flex sm:max-h-none sm:flex-row sm:flex-wrap sm:items-center sm:gap-2 sm:overflow-visible sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none"
+      >
+        <!-- 表紙の色 -->
+        <div class="filter-dropdown relative">
+          <button
+            type="button"
+            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink sm:inline-flex"
+            data-target="color-panel"
+          >
+            表紙の色で探す
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <p class="mb-2 text-xs text-inkdim sm:hidden">表紙の色で探す（1つだけ選べます）</p>
+          <div
+            id="color-panel"
+            class="dropdown-panel flex flex-wrap gap-2 sm:absolute sm:left-0 sm:top-full sm:z-30 sm:mt-2 sm:w-64 sm:rounded-lg sm:border sm:border-line sm:bg-surface sm:p-3 sm:shadow-lg"
+            role="radiogroup"
+          >
+            {colors.map((c) => (
+              <button
+                type="button"
+                role="radio"
+                class="filter-chip flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
+                data-filter-type="color"
+                data-filter-value={c.value}
+                aria-checked="false"
+              >
+                <span class="h-2.5 w-2.5 rounded-full" style={`background:${c.swatch}`}></span>
+                {c.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- 人数・構図 -->
+        <div class="filter-dropdown relative">
+          <button
+            type="button"
+            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink sm:inline-flex"
+            data-target="people-panel"
+          >
+            人数・構図で探す
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
+          </button>
+          <p class="mb-2 text-xs text-inkdim sm:hidden">人数・構図で探す（1つだけ選べます）</p>
+          <div
+            id="people-panel"
+            class="dropdown-panel flex flex-wrap gap-2 sm:absolute sm:left-0 sm:top-full sm:z-30 sm:mt-2 sm:w-48 sm:rounded-lg sm:border sm:border-line sm:bg-surface sm:p-3 sm:shadow-lg"
+            role="radiogroup"
+          >
+            {peopleOptions.map((p) => (
+              <button
+                type="button"
+                role="radio"
+                class="filter-chip rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
+                data-filter-type="people"
+                data-filter-value={p.value}
+                aria-checked="false"
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- 属性タグ -->
+        {tags.length > 0 && (
+          <div class="filter-dropdown relative">
+            <button
+              type="button"
+              class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink sm:inline-flex"
+              data-target="tag-panel"
+            >
+              タグで探す
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
+            </button>
+            <p class="mb-2 text-xs text-inkdim sm:hidden">タグで探す（1つだけ選べます）</p>
+            <div
+              id="tag-panel"
+              class="dropdown-panel flex flex-wrap gap-2 sm:absolute sm:left-0 sm:top-full sm:z-30 sm:mt-2 sm:w-80 sm:rounded-lg sm:border sm:border-line sm:bg-surface sm:p-3 sm:shadow-lg"
+              role="radiogroup"
+            >
+              {tags.map((tag) => (
+                <button
+                  type="button"
+                  role="radio"
+                  class="filter-chip rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
+                  data-filter-type="tag"
+                  data-filter-value={tag}
+                  aria-checked="false"
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div class="flex items-center gap-3 pt-1 sm:pt-0">
+          <button
+            type="button"
+            id="clear-filters"
+            class="rounded-full border border-wine px-4 py-1.5 text-xs font-medium text-wine transition-colors hover:bg-wine hover:text-white"
+          >
+            絞り込みをリセット
+          </button>
+          <p id="result-count" class="text-xs text-inkdim" aria-live="polite"></p>
+        </div>
+      </div>
+    )}
 
     <div class="flex items-center gap-4">
       {count !== undefined && (
@@ -31,7 +166,7 @@ const { count, showFilterToggle = false } = Astro.props;
           id="filter-toggle-btn"
           aria-expanded="false"
           aria-controls="filter-bar"
-          class="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-wine"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-wine sm:hidden"
         >
           <span class="sr-only">絞り込みメニューを開く</span>
           <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
@@ -46,17 +181,50 @@ const { count, showFilterToggle = false } = Astro.props;
   </div>
 </header>
 
+<style>
+  /* PC(sm以上)ではドロップダウン方式：初期状態は非表示で、.openが付いたときだけ表示する */
+  @media (min-width: 640px) {
+    .dropdown-panel {
+      display: none;
+    }
+    .dropdown-panel.open {
+      display: flex;
+    }
+  }
+</style>
+
 <script>
   const btn = document.getElementById('filter-toggle-btn');
   const filterBar = document.getElementById('filter-bar');
   const iconOpen = document.getElementById('icon-open');
   const iconClose = document.getElementById('icon-close');
 
+  // モバイル: ハンバーガーで絞り込み全体（ドロワー）を開閉する
   btn?.addEventListener('click', () => {
     filterBar?.classList.toggle('hidden');
     const isOpen = !filterBar?.classList.contains('hidden');
     btn.setAttribute('aria-expanded', String(isOpen));
     iconOpen?.classList.toggle('hidden', isOpen);
     iconClose?.classList.toggle('hidden', !isOpen);
+  });
+
+  // PC: カテゴリごとのボタンでドロップダウンを個別に開閉する
+  const dropdownTriggers = document.querySelectorAll<HTMLButtonElement>('.dropdown-trigger');
+  dropdownTriggers.forEach((trigger) => {
+    trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const targetId = trigger.dataset.target;
+      const panel = targetId ? document.getElementById(targetId) : null;
+      const willOpen = !panel?.classList.contains('open');
+      document.querySelectorAll('.dropdown-panel.open').forEach((p) => p.classList.remove('open'));
+      if (panel && willOpen) panel.classList.add('open');
+    });
+  });
+
+  document.addEventListener('click', (e) => {
+    const target = e.target as Element;
+    if (!target.closest('.filter-dropdown')) {
+      document.querySelectorAll('.dropdown-panel.open').forEach((p) => p.classList.remove('open'));
+    }
   });
 </script>
