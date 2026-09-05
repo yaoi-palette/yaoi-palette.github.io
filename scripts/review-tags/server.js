@@ -18,6 +18,7 @@ import { createServer } from 'node:http';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { exec } from 'node:child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const BOOKS_DIR = path.join(__dirname, '..', '..', 'src', 'content', 'books');
@@ -121,7 +122,19 @@ const server = createServer(async (req, res) => {
   }
 });
 
+function openBrowser(url) {
+  const cmd =
+    process.platform === 'win32'
+      ? `start "" "${url}"`
+      : process.platform === 'darwin'
+        ? `open "${url}"`
+        : `xdg-open "${url}"`;
+  exec(cmd, () => {});
+}
+
 server.listen(PORT, () => {
-  console.log(`タグ確認ツールを起動しました: http://localhost:${PORT}`);
+  const url = `http://localhost:${PORT}`;
+  console.log(`タグ確認ツールを起動しました: ${url}`);
   console.log('Ctrl+C で終了します。');
+  openBrowser(url);
 });
