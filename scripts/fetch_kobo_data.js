@@ -264,12 +264,20 @@ function normalizeSalesDate(salesDate) {
   return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
 }
 
+// 楽天APIの largeImageUrl 等は "_ex=200x200" 止まりで粗いため、
+// 同じ画像アセットに対して大きいサイズを明示的にリクエストする
+// （実測で元画像は概ね560x800程度まで存在することを確認済み）。
+function upscaleCoverUrl(url) {
+  if (!url) return url;
+  return url.replace(/_ex=\d+x\d+/, '_ex=800x800');
+}
+
 function buildBookJson(item, fallbackTitle, mainColorResult, peopleCountResult) {
   const needsReview = !mainColorResult.colorConfident || !peopleCountResult.peopleConfident;
   return {
     title: item?.title ?? fallbackTitle,
     author: item?.author ?? '不明',
-    coverUrl: item?.largeImageUrl || item?.mediumImageUrl || item?.smallImageUrl || '',
+    coverUrl: upscaleCoverUrl(item?.largeImageUrl || item?.mediumImageUrl || item?.smallImageUrl || ''),
     affiliateUrl: item?.affiliateUrl || item?.itemUrl || '',
     mainColor: mainColorResult.mainColor,
     peopleCount: peopleCountResult.peopleCount,
@@ -356,7 +364,7 @@ async function main() {
         itemIdentityToTitles.set(identityKey, [title]);
       }
 
-      const coverUrl = item.largeImageUrl || item.mediumImageUrl || item.smallImageUrl || '';
+      const coverUrl = upscaleCoverUrl(item.largeImageUrl || item.mediumImageUrl || item.smallImageUrl || '');
       const mainColorResult = await classifyMainColor(coverUrl);
       const peopleCountResult = classifyPeopleCount(`${item.title ?? ''} ${item.itemCaption ?? ''}`);
 

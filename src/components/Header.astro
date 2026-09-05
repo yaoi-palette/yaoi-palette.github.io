@@ -7,12 +7,12 @@ const { count, showFilterToggle = false } = Astro.props;
 ---
 
 <header class="sticky top-0 z-30 border-b border-line bg-stage">
-  <div class="flex w-full items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-4 lg:px-10">
-    <a href="/" class="flex shrink-0 items-center">
+  <div class="relative flex w-full items-center justify-end gap-4 px-4 py-3 sm:px-6 sm:py-4 lg:px-10">
+    <a href="/" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
       <img
         src="/img/web-logo.png"
         alt="yaoi-palette"
-        class="h-7 w-auto sm:h-9"
+        class="h-10 w-auto sm:h-12 lg:h-14"
         width="956"
         height="320"
       />
