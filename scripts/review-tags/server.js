@@ -15,7 +15,7 @@
  */
 
 import { createServer } from 'node:http';
-import { readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile, writeFile, unlink } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { exec } from 'node:child_process';
@@ -73,6 +73,12 @@ async function saveBook(filename, patch) {
   return data;
 }
 
+async function deleteBook(filename) {
+  if (!isBookFile(filename)) throw new Error('invalid filename');
+  const filePath = path.join(BOOKS_DIR, filename);
+  await unlink(filePath);
+}
+
 function sendJson(res, status, body) {
   const json = JSON.stringify(body);
   res.writeHead(status, {
@@ -112,6 +118,13 @@ const server = createServer(async (req, res) => {
       const patch = await readRequestBody(req);
       const updated = await saveBook(filename, patch);
       sendJson(res, 200, updated);
+      return;
+    }
+
+    if (req.method === 'DELETE' && saveMatch) {
+      const filename = decodeURIComponent(saveMatch[1]);
+      await deleteBook(filename);
+      sendJson(res, 200, { deleted: filename });
       return;
     }
 

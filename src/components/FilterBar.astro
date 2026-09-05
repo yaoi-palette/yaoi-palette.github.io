@@ -21,7 +21,11 @@ const peopleOptions = [
 ];
 ---
 
-<section id="filter-bar" aria-label="絞り込み" class="border-b border-line bg-surface2/60">
+<section
+  id="filter-bar"
+  aria-label="絞り込み"
+  class="hidden fixed inset-x-0 top-[72px] z-20 max-h-[calc(100vh-72px)] overflow-y-auto border-b border-line bg-surface2 shadow-lg sm:top-[84px] sm:max-h-[calc(100vh-84px)] lg:top-[96px] lg:max-h-[calc(100vh-96px)]"
+>
   <div class="w-full px-4 py-5 sm:px-6 lg:px-10">
     <div class="flex flex-col gap-4">
       <!-- Main Color -->
@@ -88,7 +92,7 @@ const peopleOptions = [
         <button
           type="button"
           id="clear-filters"
-          class="text-xs text-inkdim underline decoration-line underline-offset-4 hover:text-gold"
+          class="rounded-full border border-wine px-4 py-1.5 text-xs font-medium text-wine transition-colors hover:bg-wine hover:text-white"
         >
           絞り込みをリセット
         </button>
@@ -97,14 +101,3 @@ const peopleOptions = [
     </div>
   </div>
 </section>
-
-<style>
-  @media (max-width: 639px) {
-    #filter-bar {
-      display: none;
-    }
-    #filter-bar.is-open {
-      display: block;
-    }
-  }
-</style>

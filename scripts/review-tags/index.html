@@ -146,6 +146,8 @@
   }
   button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
   button.ghost { background: transparent; }
+  button.danger { background: transparent; border-color: #c0392b; color: #c0392b; margin-left: auto; }
+  button.danger:hover { background: #c0392b; color: #fff; }
   button:disabled { opacity: .4; cursor: default; }
   .empty { text-align: center; color: var(--sub); padding: 60px 0; }
   .memo { font-size: 11px; color: var(--sub); margin-top: 10px; }
@@ -287,6 +289,7 @@ function render() {
           <button class="ghost" id="prevBtn">← 前へ</button>
           <button class="primary" id="saveNextBtn">保存して確認済みにする →</button>
           <button class="ghost" id="skipBtn">スキップ(変更しない) →</button>
+          <button class="danger" id="deleteBtn">この本を削除</button>
           <span class="saved-flash" id="savedFlash"></span>
         </div>
       </div>
@@ -361,6 +364,28 @@ function render() {
   document.getElementById('prevBtn').onclick = () => { currentIndex--; render(); };
   document.getElementById('skipBtn').onclick = () => { currentIndex++; render(); };
   document.getElementById('saveNextBtn').onclick = () => saveCurrent(book, true);
+  document.getElementById('deleteBtn').onclick = () => deleteCurrent(book);
+}
+
+async function deleteCurrent(book) {
+  if (!confirm(`「${book.title}」を削除します。この操作は取り消せません。よろしいですか？`)) return;
+
+  const listBefore = visibleBooks();
+  const posBefore = listBefore.findIndex(b => b.filename === book.filename);
+  const nextFilenameBefore = listBefore[posBefore + 1]?.filename;
+
+  const res = await fetch(`/api/books/${encodeURIComponent(book.filename)}`, { method: 'DELETE' });
+  if (!res.ok) {
+    alert('削除に失敗しました');
+    return;
+  }
+
+  books = books.filter(b => b.filename !== book.filename);
+
+  const listAfter = visibleBooks();
+  const idx = nextFilenameBefore ? listAfter.findIndex(b => b.filename === nextFilenameBefore) : -1;
+  currentIndex = idx !== -1 ? idx : Math.min(posBefore, listAfter.length - 1);
+  render();
 }
 
 function renderSidebar(list, currentBook) {

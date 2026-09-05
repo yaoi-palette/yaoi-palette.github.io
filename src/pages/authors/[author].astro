@@ -47,7 +47,7 @@ const { author, books } = Astro.props;
     <h1 class="font-display text-2xl text-ink sm:text-3xl">{author}</h1>
     <p class="mt-1 text-sm text-inkdim">{books.length} 冊を収蔵</p>
 
-    <ul class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5 lg:gap-6 xl:grid-cols-6 2xl:grid-cols-7">
+    <ul class="mt-6 grid grid-cols-[repeat(auto-fit,minmax(140px,180px))] justify-center gap-4 sm:gap-5 lg:gap-6">
       {books.map((book) => (
         <li>
           <BookCard book={book} />
