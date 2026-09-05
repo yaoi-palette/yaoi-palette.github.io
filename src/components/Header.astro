@@ -32,10 +32,10 @@ const fontOptions = [
 ---
 
 <header class="sticky top-0 z-30 border-b border-line bg-stage">
-  <div class="relative flex min-h-[72px] w-full items-center justify-end gap-4 px-4 py-3 sm:min-h-[84px] sm:justify-between sm:px-6 sm:py-4 lg:min-h-[96px] lg:px-10">
+  <div class="relative flex min-h-[72px] w-full items-center justify-end gap-4 px-4 py-3 sm:min-h-[84px] sm:px-6 sm:py-4 lg:min-h-[96px] lg:px-10 xl:justify-between">
     <a
       href="/"
-      class="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 sm:static sm:left-auto sm:top-auto sm:order-first sm:translate-x-0 sm:translate-y-0"
+      class="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center gap-2 xl:static xl:left-auto xl:top-auto xl:order-first xl:translate-x-0 xl:translate-y-0"
     >
       <img
         src="/img/web-logo.png"
@@ -51,22 +51,22 @@ const fontOptions = [
       <div
         id="filter-bar"
         aria-label="絞り込み"
-        class="hidden fixed inset-x-0 top-[72px] z-20 max-h-[calc(100vh-72px)] flex-col gap-4 overflow-y-auto border-b border-line bg-surface2 p-4 shadow-lg sm:static sm:top-auto sm:z-auto sm:flex sm:max-h-none sm:flex-row sm:flex-wrap sm:items-center sm:gap-2 sm:overflow-visible sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none"
+        class="hidden fixed inset-x-0 top-[72px] z-20 max-h-[calc(100vh-72px)] flex-col gap-4 overflow-y-auto border-b border-line bg-surface2 p-4 shadow-lg xl:static xl:top-auto xl:z-auto xl:flex xl:max-h-none xl:flex-row xl:flex-wrap xl:items-center xl:gap-2 xl:overflow-visible xl:border-0 xl:bg-transparent xl:p-0 xl:shadow-none"
       >
         <!-- 表紙の色 -->
         <div class="filter-dropdown relative">
           <button
             type="button"
-            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink sm:inline-flex"
+            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink xl:inline-flex"
             data-target="color-panel"
           >
             表紙の色で探す
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
           </button>
-          <p class="mb-2 text-xs text-inkdim sm:hidden">表紙の色で探す（1つだけ選べます）</p>
+          <p class="mb-2 text-xs text-inkdim xl:hidden">表紙の色で探す（1つだけ選べます）</p>
           <div
             id="color-panel"
-            class="dropdown-panel flex flex-wrap gap-2 sm:absolute sm:left-0 sm:top-full sm:z-30 sm:mt-2 sm:w-64 sm:rounded-lg sm:border sm:border-line sm:bg-surface sm:p-3 sm:shadow-lg"
+            class="dropdown-panel flex flex-wrap gap-2 xl:absolute xl:left-0 xl:top-full xl:z-30 xl:mt-2 xl:w-64 xl:rounded-lg xl:border xl:border-line xl:bg-surface xl:p-3 xl:shadow-lg"
             role="radiogroup"
           >
             {colors.map((c) => (
@@ -89,16 +89,16 @@ const fontOptions = [
         <div class="filter-dropdown relative">
           <button
             type="button"
-            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink sm:inline-flex"
+            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink xl:inline-flex"
             data-target="people-panel"
           >
             人数・構図で探す
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
           </button>
-          <p class="mb-2 text-xs text-inkdim sm:hidden">人数・構図で探す（1つだけ選べます）</p>
+          <p class="mb-2 text-xs text-inkdim xl:hidden">人数・構図で探す（1つだけ選べます）</p>
           <div
             id="people-panel"
-            class="dropdown-panel flex flex-wrap gap-2 sm:absolute sm:left-0 sm:top-full sm:z-30 sm:mt-2 sm:w-48 sm:rounded-lg sm:border sm:border-line sm:bg-surface sm:p-3 sm:shadow-lg"
+            class="dropdown-panel flex flex-wrap gap-2 xl:absolute xl:left-0 xl:top-full xl:z-30 xl:mt-2 xl:w-48 xl:rounded-lg xl:border xl:border-line xl:bg-surface xl:p-3 xl:shadow-lg"
             role="radiogroup"
           >
             {peopleOptions.map((p) => (
@@ -120,16 +120,16 @@ const fontOptions = [
         <div class="filter-dropdown relative">
           <button
             type="button"
-            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink sm:inline-flex"
+            class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink xl:inline-flex"
             data-target="font-panel"
           >
             フォントで探す
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
           </button>
-          <p class="mb-2 text-xs text-inkdim sm:hidden">フォントで探す（1つだけ選べます）</p>
+          <p class="mb-2 text-xs text-inkdim xl:hidden">フォントで探す（1つだけ選べます）</p>
           <div
             id="font-panel"
-            class="dropdown-panel flex flex-wrap gap-2 sm:absolute sm:left-0 sm:top-full sm:z-30 sm:mt-2 sm:w-48 sm:rounded-lg sm:border sm:border-line sm:bg-surface sm:p-3 sm:shadow-lg"
+            class="dropdown-panel flex flex-wrap gap-2 xl:absolute xl:left-0 xl:top-full xl:z-30 xl:mt-2 xl:w-48 xl:rounded-lg xl:border xl:border-line xl:bg-surface xl:p-3 xl:shadow-lg"
             role="radiogroup"
           >
             {fontOptions.map((f) => (
@@ -152,16 +152,16 @@ const fontOptions = [
           <div class="filter-dropdown relative">
             <button
               type="button"
-              class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink sm:inline-flex"
+              class="dropdown-trigger hidden items-center gap-1 rounded-full border border-line px-3 py-2 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink xl:inline-flex"
               data-target="tag-panel"
             >
               タグで探す
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3 w-3"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" /></svg>
             </button>
-            <p class="mb-2 text-xs text-inkdim sm:hidden">タグで探す（1つだけ選べます）</p>
+            <p class="mb-2 text-xs text-inkdim xl:hidden">タグで探す（1つだけ選べます）</p>
             <div
               id="tag-panel"
-              class="dropdown-panel flex flex-wrap gap-2 sm:absolute sm:left-0 sm:top-full sm:z-30 sm:mt-2 sm:w-80 sm:rounded-lg sm:border sm:border-line sm:bg-surface sm:p-3 sm:shadow-lg"
+              class="dropdown-panel flex flex-wrap gap-2 xl:absolute xl:left-0 xl:top-full xl:z-30 xl:mt-2 xl:w-80 xl:rounded-lg xl:border xl:border-line xl:bg-surface xl:p-3 xl:shadow-lg"
               role="radiogroup"
             >
               {tags.map((tag) => (
@@ -180,7 +180,7 @@ const fontOptions = [
           </div>
         )}
 
-        <div class="flex items-center gap-3 pt-1 sm:pt-0">
+        <div class="flex items-center gap-3 pt-1 xl:pt-0">
           <button
             type="button"
             id="clear-filters"
@@ -195,7 +195,7 @@ const fontOptions = [
 
     <div class="flex items-center gap-4">
       {count !== undefined && (
-        <p class="hidden text-sm text-inkdim sm:block">
+        <p class="hidden text-sm text-inkdim xl:block">
           <span class="text-ink">{count}</span> 冊を収蔵
         </p>
       )}
@@ -206,7 +206,7 @@ const fontOptions = [
           id="filter-toggle-btn"
           aria-expanded="false"
           aria-controls="filter-bar"
-          class="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-wine sm:hidden"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-wine xl:hidden"
         >
           <span class="sr-only">絞り込みメニューを開く</span>
           <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="h-5 w-5">
@@ -222,8 +222,9 @@ const fontOptions = [
 </header>
 
 <style>
-  /* PC(sm以上)ではドロップダウン方式：初期状態は非表示で、.openが付いたときだけ表示する */
-  @media (min-width: 640px) {
+  /* PC(xl=1280px以上)ではドロップダウン方式：初期状態は非表示で、.openが付いたときだけ表示する */
+  /* iPad等のタブレット幅はスマホと同じハンバーガーメニュー表示のままにする */
+  @media (min-width: 1280px) {
     .dropdown-panel {
       display: none;
     }
