@@ -1,0 +1,50 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  book: CollectionEntry<'books'>;
+}
+const { book } = Astro.props;
+const { title, author, coverUrl, mainColor, peopleCount, tags } = book.data;
+
+const peopleLabel: Record<string, string> = {
+  solo: '1人',
+  duo: '2人',
+  group: '3人以上',
+};
+---
+
+<a
+  href={`/books/${book.id}/`}
+  class="book-card group relative block overflow-hidden rounded-sm bg-surface"
+  data-color={mainColor}
+  data-people={peopleCount}
+  data-tags={tags.join(',')}
+  data-title={title}
+>
+  <div class="aspect-cover w-full overflow-hidden">
+    <img
+      src={coverUrl}
+      alt={`『${title}』の表紙`}
+      loading="lazy"
+      decoding="async"
+      class="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04]"
+      width="450"
+      height="600"
+    />
+  </div>
+
+  <div
+    class="pointer-events-none absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-stage/95 via-stage/10 to-transparent p-3 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+  >
+    <p class="font-display text-sm leading-snug text-ink text-balance">{title}</p>
+    <p class="mt-0.5 text-xs text-inkdim">{author} ・ {peopleLabel[peopleCount]}</p>
+    {tags.length > 0 && (
+      <ul class="mt-2 flex flex-wrap gap-1">
+        {tags.slice(0, 3).map((tag) => (
+          <li class="rounded-sm border border-line/80 px-1.5 py-0.5 text-[10px] text-inkdim">{tag}</li>
+        ))}
+      </ul>
+    )}
+  </div>
+</a>

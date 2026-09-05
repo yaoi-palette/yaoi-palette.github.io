@@ -1,0 +1,96 @@
+---
+interface Props {
+  tags: string[];
+}
+const { tags } = Astro.props;
+
+const colors: { value: string; label: string; swatch: string }[] = [
+  { value: 'pink', label: 'ピンク', swatch: '#E58FA6' },
+  { value: 'red', label: '赤', swatch: '#B4485F' },
+  { value: 'black', label: '黒・ダーク', swatch: '#231F29' },
+  { value: 'blue', label: 'ブルー', swatch: '#3C7EA6' },
+  { value: 'yellow', label: '黄・オレンジ', swatch: '#D8A31A' },
+  { value: 'green', label: 'グリーン', swatch: '#5C8F60' },
+  { value: 'white', label: '白', swatch: '#E8E4DC' },
+];
+
+const peopleOptions = [
+  { value: 'solo', label: '1人' },
+  { value: 'duo', label: '2人' },
+  { value: 'group', label: '3人以上' },
+];
+---
+
+<section aria-label="絞り込み" class="border-b border-line bg-stage/60">
+  <div class="mx-auto max-w-6xl px-5 py-5 sm:px-8">
+    <div class="flex flex-col gap-4">
+      <!-- Main Color -->
+      <div>
+        <p class="mb-2 text-xs text-inkdim">表紙の色で探す</p>
+        <div class="flex flex-wrap gap-2" id="color-filters" role="group">
+          {colors.map((c) => (
+            <button
+              type="button"
+              class="filter-chip flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
+              data-filter-type="color"
+              data-filter-value={c.value}
+              aria-pressed="false"
+            >
+              <span class="h-2.5 w-2.5 rounded-full" style={`background:${c.swatch}`}></span>
+              {c.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- 人数・構図 -->
+      <div>
+        <p class="mb-2 text-xs text-inkdim">人数・構図で探す</p>
+        <div class="flex flex-wrap gap-2" id="people-filters" role="group">
+          {peopleOptions.map((p) => (
+            <button
+              type="button"
+              class="filter-chip rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
+              data-filter-type="people"
+              data-filter-value={p.value}
+              aria-pressed="false"
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- 属性タグ -->
+      {tags.length > 0 && (
+        <div>
+          <p class="mb-2 text-xs text-inkdim">タグで探す</p>
+          <div class="flex flex-wrap gap-2" id="tag-filters" role="group">
+            {tags.map((tag) => (
+              <button
+                type="button"
+                class="filter-chip rounded-full border border-line px-3 py-1.5 text-xs text-inkdim transition-colors hover:border-wine hover:text-ink"
+                data-filter-type="tag"
+                data-filter-value={tag}
+                aria-pressed="false"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div class="flex items-center gap-3 pt-1">
+        <button
+          type="button"
+          id="clear-filters"
+          class="text-xs text-inkdim underline decoration-line underline-offset-4 hover:text-gold"
+        >
+          絞り込みをリセット
+        </button>
+        <p id="result-count" class="text-xs text-inkdim" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+</section>

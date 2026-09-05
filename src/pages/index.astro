@@ -1,0 +1,118 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FilterBar from '../components/FilterBar.astro';
+import BookCard from '../components/BookCard.astro';
+
+const books = (await getCollection('books')).sort((a, b) => {
+  const da = a.data.publishedDate?.getTime() ?? 0;
+  const db = b.data.publishedDate?.getTime() ?? 0;
+  return db - da;
+});
+
+const allTags = [...new Set(books.flatMap((b) => b.data.tags))].sort((a, b) =>
+  a.localeCompare(b, 'ja')
+);
+---
+
+<Layout title="積み本、開く。 - BL本棚ギャラリー">
+  <Header count={books.length} />
+  <FilterBar tags={allTags} />
+
+  <main class="mx-auto max-w-6xl px-5 py-8 sm:px-8">
+    {books.length === 0 ? (
+      <p class="py-24 text-center text-inkdim">まだ本が登録されていません。</p>
+    ) : (
+      <ul
+        id="book-grid"
+        class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 md:grid-cols-4 lg:grid-cols-5"
+      >
+        {books.map((book) => (
+          <li>
+            <BookCard book={book} />
+          </li>
+        ))}
+      </ul>
+    )}
+    <p id="empty-state" class="hidden py-24 text-center text-inkdim">
+      条件に合う本が見つかりませんでした。絞り込みを調整してください。
+    </p>
+  </main>
+
+  <Footer />
+</Layout>
+
+<script>
+  type FilterType = 'color' | 'people' | 'tag';
+
+  const active: Record<FilterType, Set<string>> = {
+    color: new Set(),
+    people: new Set(),
+    tag: new Set(),
+  };
+
+  const chips = document.querySelectorAll<HTMLButtonElement>('.filter-chip');
+  const cards = document.querySelectorAll<HTMLAnchorElement>('.book-card');
+  const resultCount = document.getElementById('result-count');
+  const emptyState = document.getElementById('empty-state');
+  const grid = document.getElementById('book-grid');
+  const clearBtn = document.getElementById('clear-filters');
+
+  function applyFilters() {
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const cardColor = card.dataset.color ?? '';
+      const cardPeople = card.dataset.people ?? '';
+      const cardTags = (card.dataset.tags ?? '').split(',').filter(Boolean);
+
+      const colorOk = active.color.size === 0 || active.color.has(cardColor);
+      const peopleOk = active.people.size === 0 || active.people.has(cardPeople);
+      const tagOk =
+        active.tag.size === 0 || [...active.tag].every((t) => cardTags.includes(t));
+
+      const visible = colorOk && peopleOk && tagOk;
+      const li = card.closest('li');
+      if (li) li.classList.toggle('hidden', !visible);
+      if (visible) visibleCount += 1;
+    });
+
+    if (resultCount) resultCount.textContent = `${visibleCount}冊を表示中`;
+    if (emptyState) emptyState.classList.toggle('hidden', visibleCount !== 0);
+    if (grid) grid.classList.toggle('hidden', visibleCount === 0);
+  }
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      const type = chip.dataset.filterType as FilterType | undefined;
+      const value = chip.dataset.filterValue;
+      if (!type || !value) return;
+
+      const isActive = chip.getAttribute('aria-pressed') === 'true';
+      chip.setAttribute('aria-pressed', String(!isActive));
+      chip.classList.toggle('border-wine', !isActive);
+      chip.classList.toggle('text-ink', !isActive);
+      chip.classList.toggle('bg-surface2', !isActive);
+
+      if (isActive) {
+        active[type].delete(value);
+      } else {
+        active[type].add(value);
+      }
+      applyFilters();
+    });
+  });
+
+  clearBtn?.addEventListener('click', () => {
+    (Object.keys(active) as FilterType[]).forEach((type) => active[type].clear());
+    chips.forEach((chip) => {
+      chip.setAttribute('aria-pressed', 'false');
+      chip.classList.remove('border-wine', 'text-ink', 'bg-surface2');
+    });
+    applyFilters();
+  });
+
+  applyFilters();
+</script>

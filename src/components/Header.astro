@@ -1,0 +1,20 @@
+---
+interface Props {
+  count?: number;
+}
+const { count } = Astro.props;
+---
+
+<header class="sticky top-0 z-30 border-b border-line bg-stage/90 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8">
+    <a href="/" class="group flex items-baseline gap-2">
+      <span class="font-display text-xl tracking-wide text-ink sm:text-2xl">積み本、開く。</span>
+      <span class="hidden text-xs text-inkdim sm:inline">a BL bookshelf</span>
+    </a>
+    {count !== undefined && (
+      <p class="text-sm text-inkdim">
+        <span class="text-ink">{count}</span> 冊を収蔵
+      </p>
+    )}
+  </div>
+</header>

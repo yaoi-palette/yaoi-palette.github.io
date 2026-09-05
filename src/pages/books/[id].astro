@@ -1,0 +1,83 @@
+---
+import { getCollection, type CollectionEntry } from 'astro:content';
+import Layout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import AffiliateButton from '../../components/AffiliateButton.astro';
+
+export async function getStaticPaths() {
+  const books = await getCollection('books');
+  return books.map((book) => ({
+    params: { id: book.id },
+    props: { book },
+  }));
+}
+
+interface Props {
+  book: CollectionEntry<'books'>;
+}
+const { book } = Astro.props;
+const { title, author, coverUrl, affiliateUrl, tags, description, price, mainColor, peopleCount } =
+  book.data;
+
+const peopleLabel: Record<string, string> = {
+  solo: '1人',
+  duo: '2人',
+  group: '3人以上',
+};
+const colorLabel: Record<string, string> = {
+  pink: 'ピンク',
+  black: '黒・ダーク',
+  blue: 'ブルー',
+  yellow: '黄・オレンジ',
+  green: 'グリーン',
+  white: '白',
+  red: '赤',
+};
+---
+
+<Layout title={`${title} - 積み本、開く。`} description={description}>
+  <Header />
+  <main class="mx-auto max-w-4xl px-5 py-10 sm:px-8">
+    <a href="/" class="mb-8 inline-block text-xs text-inkdim underline decoration-line underline-offset-4 hover:text-gold">
+      ← 本棚に戻る
+    </a>
+
+    <div class="grid gap-8 sm:grid-cols-[280px_1fr]">
+      <div class="aspect-cover w-full overflow-hidden rounded-sm bg-surface">
+        <img src={coverUrl} alt={`『${title}』の表紙`} class="h-full w-full object-cover" width="450" height="600" />
+      </div>
+
+      <div>
+        <h1 class="font-display text-2xl leading-snug text-ink text-balance sm:text-3xl">{title}</h1>
+        <p class="mt-2 text-sm text-inkdim">{author}</p>
+
+        <dl class="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs text-inkdim">
+          <div class="flex items-center gap-1.5">
+            <dt>色</dt>
+            <dd class="text-ink">{colorLabel[mainColor]}</dd>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <dt>人数</dt>
+            <dd class="text-ink">{peopleLabel[peopleCount]}</dd>
+          </div>
+        </dl>
+
+        {tags.length > 0 && (
+          <ul class="mt-4 flex flex-wrap gap-1.5">
+            {tags.map((tag) => (
+              <li class="rounded-full border border-line px-3 py-1 text-xs text-inkdim">{tag}</li>
+            ))}
+          </ul>
+        )}
+
+        {description && <p class="mt-6 max-w-prose text-sm leading-relaxed text-ink">{description}</p>}
+
+        <div class="mt-8">
+          <AffiliateButton href={affiliateUrl} price={price} />
+        </div>
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>
