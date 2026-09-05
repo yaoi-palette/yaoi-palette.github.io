@@ -2,17 +2,22 @@
 /**
  * extract_titles.js
  * ------------------------------------------------------------
- * 楽天Koboの購入履歴ページ（テキストとして保存したもの）から
- * 作品タイトルの一覧を抽出し、JSON配列として出力する。
+ * 楽天Koboの購入履歴から作品タイトルの一覧を抽出し、JSON配列として出力する。
+ *
+ * 入力は次のどちらかに対応（両方あればCSVを優先）:
+ *   - data/purchase_history.csv : 購入履歴ページから「CSVエクスポート」した場合
+ *     （ヘッダー行に "商品名"/"タイトル"/"title" のいずれかを含む列を自動検出）
+ *   - data/purchase_history.txt : 購入履歴ページを全選択してコピペした場合
+ *     （日付・価格・注文番号などのノイズ行を正規表現で除去）
  *
  * 使い方:
- *   1. 楽天Koboの「購入履歴」画面を開き、対象部分を全選択してコピー
- *   2. data/purchase_history.txt として保存（UTF-8）
- *   3. node scripts/extract_titles.js
+ *   1. 上記のいずれかを data/ 以下に保存（UTF-8）
+ *   2. node scripts/extract_titles.js
  *      -> data/extracted_titles.json が生成される
+ *   3. 内容を確認し、誤抽出があれば手動で編集してから fetch_kobo_data.js に渡す
  *
  * 購入履歴のレイアウトは楽天側の仕様変更で変わることがあるため、
- * 抽出できなかった場合は下部の PATTERNS を調整すること。
+ * 抽出できなかった場合は下部の NOISE_PATTERNS / CSV_TITLE_HEADERS を調整すること。
  * ------------------------------------------------------------
  */
 
@@ -21,8 +26,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const INPUT_PATH = path.join(__dirname, '..', 'data', 'purchase_history.txt');
-const OUTPUT_PATH = path.join(__dirname, '..', 'data', 'extracted_titles.json');
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const CSV_INPUT_PATH = path.join(DATA_DIR, 'purchase_history.csv');
+const TXT_INPUT_PATH = path.join(DATA_DIR, 'purchase_history.txt');
+const OUTPUT_PATH = path.join(DATA_DIR, 'extracted_titles.json');
 
 // 除外したい行（購入日・価格・注文番号などのノイズ）を検出する正規表現
 const NOISE_PATTERNS = [
@@ -36,11 +43,14 @@ const NOISE_PATTERNS = [
   /^配送/,
 ];
 
+// CSVのヘッダーからタイトル列を推定するためのキーワード
+const CSV_TITLE_HEADERS = ['商品名', 'タイトル', 'title', '作品名'];
+
 // 「第N巻」「(N)」などの巻数表記は残しつつ、末尾の余計な記号を除去する
 function cleanTitle(line) {
   return line
-    .replace(/^[\s\u3000・\-–—]+/, '')
-    .replace(/[\s\u3000]+$/, '')
+    .replace(/^[\s　・\-–—]+/, '')
+    .replace(/[\s　]+$/, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
 }
@@ -50,17 +60,71 @@ function isNoise(line) {
   return NOISE_PATTERNS.some((re) => re.test(line));
 }
 
-async function main() {
-  let raw;
-  try {
-    raw = await readFile(INPUT_PATH, 'utf-8');
-  } catch (err) {
-    console.error(`入力ファイルが見つかりません: ${INPUT_PATH}`);
-    console.error('先に data/purchase_history.txt を用意してください。');
+// 簡易CSVパーサー（ダブルクォート囲み・カンマ区切りに対応）
+function parseCsvLine(line) {
+  const cells = [];
+  let cur = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (line[i + 1] === '"') {
+          cur += '"';
+          i += 1;
+        } else {
+          inQuotes = false;
+        }
+      } else {
+        cur += ch;
+      }
+    } else if (ch === '"') {
+      inQuotes = true;
+    } else if (ch === ',') {
+      cells.push(cur);
+      cur = '';
+    } else {
+      cur += ch;
+    }
+  }
+  cells.push(cur);
+  return cells.map((c) => c.trim());
+}
+
+function extractFromCsv(raw) {
+  const lines = raw.split(/\r?\n/).filter((l) => l.trim().length > 0);
+  if (lines.length === 0) return [];
+
+  const header = parseCsvLine(lines[0]);
+  const titleColIndex = header.findIndex((h) =>
+    CSV_TITLE_HEADERS.some((key) => h.includes(key))
+  );
+
+  if (titleColIndex === -1) {
+    console.error(`CSVヘッダーにタイトル列が見つかりません: ${header.join(', ')}`);
+    console.error(`次のいずれかを含む列名が必要です: ${CSV_TITLE_HEADERS.join(', ')}`);
     process.exitCode = 1;
-    return;
+    return [];
   }
 
+  const titles = [];
+  const seen = new Set();
+
+  for (const line of lines.slice(1)) {
+    const cells = parseCsvLine(line);
+    const raw = cells[titleColIndex];
+    if (!raw) continue;
+    const cleaned = cleanTitle(raw);
+    if (!cleaned || seen.has(cleaned)) continue;
+    seen.add(cleaned);
+    titles.push(cleaned);
+  }
+
+  return titles;
+}
+
+function extractFromText(raw) {
   const lines = raw.split(/\r?\n/).map((l) => l.trim());
   const titles = [];
   const seen = new Set();
@@ -73,6 +137,35 @@ async function main() {
     if (cleaned.length > 60) continue;
     seen.add(cleaned);
     titles.push(cleaned);
+  }
+
+  return titles;
+}
+
+async function main() {
+  let titles;
+
+  try {
+    const raw = await readFile(CSV_INPUT_PATH, 'utf-8');
+    console.log(`CSV入力を使用: ${CSV_INPUT_PATH}`);
+    titles = extractFromCsv(raw);
+  } catch {
+    try {
+      const raw = await readFile(TXT_INPUT_PATH, 'utf-8');
+      console.log(`テキスト入力を使用: ${TXT_INPUT_PATH}`);
+      titles = extractFromText(raw);
+    } catch {
+      console.error('入力ファイルが見つかりません。');
+      console.error(`次のいずれかを用意してください: ${CSV_INPUT_PATH} または ${TXT_INPUT_PATH}`);
+      process.exitCode = 1;
+      return;
+    }
+  }
+
+  if (!titles || titles.length === 0) {
+    console.error('タイトルを1件も抽出できませんでした。入力ファイルの内容を確認してください。');
+    process.exitCode = 1;
+    return;
   }
 
   await mkdir(path.dirname(OUTPUT_PATH), { recursive: true });
