@@ -53,6 +53,7 @@ const DATA_DIR = path.join(__dirname, '..', 'data');
 const TITLES_PATH = path.join(DATA_DIR, 'extracted_titles.json');
 const PROGRESS_PATH = path.join(DATA_DIR, 'fetch_progress.json');
 const FAILURES_PATH = path.join(DATA_DIR, 'fetch_failures.json');
+const AMBIGUOUS_PATH = path.join(DATA_DIR, 'fetch_ambiguous_matches.json');
 const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'content', 'books');
 
 const APP_ID = process.env.RAKUTEN_APP_ID;
@@ -101,6 +102,41 @@ async function withRetry(fn, label) {
   throw lastErr;
 }
 
+const CANDIDATE_HITS = 5;
+// 短い・記号だらけのタイトルだと検索エンジンが無関係な結果を返すことがあるため、
+// 上位候補の中から最もタイトルが似ているものだけを採用する。閾値未満は「見つからなかった」扱い。
+const MIN_SIMILARITY = 0.3;
+
+function normalizeForCompare(s) {
+  return s
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/[\s　!！?？.,、。・\-–—ー~〜'"「」『』【】()（）\[\]／/]/g, '');
+}
+
+function bigrams(s) {
+  const grams = new Set();
+  for (let i = 0; i < s.length - 1; i++) grams.add(s.slice(i, i + 2));
+  if (grams.size === 0 && s.length > 0) grams.add(s);
+  return grams;
+}
+
+// Dice係数によるビグラム類似度（日本語は分かち書きされないため文字2-gramで比較）。
+// 「home」のように極端に短い購入履歴タイトルは、長い無関係な商品名の一部分に
+// たまたま含まれるだけでDice係数がなだらかに底上げされてしまうことがあるため、
+// 「クエリ自身のビグラムのうち何割が候補に含まれるか」(containment)も別途要求する。
+function titleSimilarity(a, b) {
+  const A = bigrams(normalizeForCompare(a));
+  const B = bigrams(normalizeForCompare(b));
+  if (A.size === 0 || B.size === 0) return 0;
+  let overlap = 0;
+  for (const g of A) if (B.has(g)) overlap++;
+  const dice = (2 * overlap) / (A.size + B.size);
+  const containment = overlap / A.size;
+  // 短いタイトルほど誤爆しやすいので、containmentが低ければ0点扱いにする
+  return containment >= 0.6 ? dice : Math.min(dice, containment * 0.3);
+}
+
 async function searchTitle(title) {
   const params = new URLSearchParams({
     format: 'json',
@@ -108,7 +144,7 @@ async function searchTitle(title) {
     accessKey: ACCESS_KEY,
     affiliateId: AFFILIATE_ID ?? '',
     keyword: title,
-    hits: '1',
+    hits: String(CANDIDATE_HITS),
   });
   if (GENRE_ID) params.set('booksGenreId', GENRE_ID);
 
@@ -123,7 +159,21 @@ async function searchTitle(title) {
   }
 
   const data = await res.json();
-  return data?.Items?.[0]?.Item ?? null;
+  const items = (data?.Items ?? []).map((wrapper) => wrapper.Item).filter(Boolean);
+  if (items.length === 0) return null;
+
+  let best = null;
+  let bestScore = -1;
+  for (const item of items) {
+    const score = titleSimilarity(title, item.title ?? '');
+    if (score > bestScore) {
+      bestScore = score;
+      best = item;
+    }
+  }
+
+  if (bestScore < MIN_SIMILARITY) return null;
+  return best;
 }
 
 // --- mainColor: 表紙画像から支配色を抽出し、7色パレットに丸める ---
@@ -203,6 +253,17 @@ function classifyPeopleCount(text) {
   return { peopleCount: 'duo', peopleConfident: false };
 }
 
+// 楽天APIのsalesDateは「2022年02月01日頃」のような日本語表記のため、
+// JSのDateパーサーがそのままでは解釈できない（Invalid Dateになる）。
+// z.coerce.date() で扱えるよう ISO形式(YYYY-MM-DD) に変換する。
+function normalizeSalesDate(salesDate) {
+  if (!salesDate) return undefined;
+  const match = salesDate.match(/(\d{4})年(\d{1,2})月(\d{1,2})日/);
+  if (!match) return undefined;
+  const [, y, m, d] = match;
+  return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+}
+
 function buildBookJson(item, fallbackTitle, mainColorResult, peopleCountResult) {
   const needsReview = !mainColorResult.colorConfident || !peopleCountResult.peopleConfident;
   return {
@@ -215,7 +276,7 @@ function buildBookJson(item, fallbackTitle, mainColorResult, peopleCountResult) 
     tags: [], // 要確認: スパダリ・執着・オフィスラブ等のタグを追記
     description: item?.itemCaption ?? '',
     price: item?.itemPrice ?? undefined,
-    publishedDate: item?.salesDate ?? undefined,
+    publishedDate: normalizeSalesDate(item?.salesDate),
     memo: needsReview
       ? '楽天APIから自動生成。mainColor/peopleCountは自動推定のため要確認。tagsは未設定。'
       : '楽天APIから自動生成。tagsは未設定のため要確認。',
@@ -256,6 +317,11 @@ async function main() {
 
   const progress = await loadJsonSafe(PROGRESS_PATH, {});
   const failures = [];
+  // 同じ商品(ISBN/URL基準)が複数の購入履歴タイトルから解決された場合に検知する
+  // （例: 巻数なしのタイトルが別の巻とマッチしてしまい、本来の巻が欠落するケース）
+  const itemIdentityToTitles = new Map();
+  const usedFilenames = new Map();
+  const ambiguousMatches = [];
 
   let successCount = 0;
   let skipCount = 0;
@@ -283,12 +349,32 @@ async function main() {
         continue;
       }
 
+      const identityKey = item.isbn || item.itemUrl || item.title;
+      if (itemIdentityToTitles.has(identityKey)) {
+        itemIdentityToTitles.get(identityKey).push(title);
+      } else {
+        itemIdentityToTitles.set(identityKey, [title]);
+      }
+
       const coverUrl = item.largeImageUrl || item.mediumImageUrl || item.smallImageUrl || '';
       const mainColorResult = await classifyMainColor(coverUrl);
       const peopleCountResult = classifyPeopleCount(`${item.title ?? ''} ${item.itemCaption ?? ''}`);
 
       const bookJson = buildBookJson(item, title, mainColorResult, peopleCountResult);
-      const filename = `${slugify(bookJson.title)}.json`;
+      let filename = `${slugify(bookJson.title)}.json`;
+
+      // 別の商品が同名スラッグを既に使っていた場合は上書きせず連番を振る
+      if (usedFilenames.has(filename) && usedFilenames.get(filename) !== identityKey) {
+        let n = 2;
+        let candidate = `${slugify(bookJson.title)}-${n}.json`;
+        while (usedFilenames.has(candidate) && usedFilenames.get(candidate) !== identityKey) {
+          n += 1;
+          candidate = `${slugify(bookJson.title)}-${n}.json`;
+        }
+        filename = candidate;
+      }
+      usedFilenames.set(filename, identityKey);
+
       const outPath = path.join(OUTPUT_DIR, filename);
       await writeFile(outPath, JSON.stringify(bookJson, null, 2), 'utf-8');
 
@@ -311,11 +397,23 @@ async function main() {
     await writeFile(FAILURES_PATH, JSON.stringify(failures, null, 2), 'utf-8');
   }
 
+  for (const [, sourceTitles] of itemIdentityToTitles) {
+    if (sourceTitles.length > 1) {
+      ambiguousMatches.push({ sourceTitles });
+    }
+  }
+  if (ambiguousMatches.length > 0) {
+    await writeFile(AMBIGUOUS_PATH, JSON.stringify(ambiguousMatches, null, 2), 'utf-8');
+  }
+
   console.log('----------------------------------------');
   console.log(`成功: ${successCount} 件 / スキップ(処理済み): ${skipCount} 件 / 失敗・未検出: ${failCount} 件`);
   console.log(`生成先: ${OUTPUT_DIR}`);
   if (failures.length > 0) {
     console.log(`失敗・未検出の一覧: ${FAILURES_PATH}`);
+  }
+  if (ambiguousMatches.length > 0) {
+    console.log(`要確認（複数の購入タイトルが同じ商品に一致）: ${AMBIGUOUS_PATH} (${ambiguousMatches.length}件)`);
   }
   console.log('mainColor / peopleCount は自動推定です。tags と合わせて必ず内容を確認してください。');
 }

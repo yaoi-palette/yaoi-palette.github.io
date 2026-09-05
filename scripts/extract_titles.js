@@ -46,11 +46,35 @@ const NOISE_PATTERNS = [
 // CSVのヘッダーからタイトル列を推定するためのキーワード
 const CSV_TITLE_HEADERS = ['商品名', 'タイトル', 'title', '作品名'];
 
+// 「【電子限定〇〇】」「【電子書籍】」など、購入履歴特有の販促・フォーマット表記を
+// 検出するためのキーワード。これらを含む【】/＜＞括弧は検索ノイズになるため除去する。
+const PROMO_BRACKET_KEYWORDS =
+  /電子|限定|特典|描き下ろし|かきおろし|イラスト入り|単行本版|単話版|単話売|合冊版|無料|セット|全巻|特装|書き下ろし|ボーナス|試し読み|同時収録|購入特典|コミックス|小冊子|ペーパー|全サ|缶バッジ|ドラマCD|ブロマイド|リーフレット|複製原画/;
+
+// 【...】＜...＞（...）(...）[...] の括弧のうち、販促キーワードを含むものだけを取り除く。
+// 括弧の種類ごとに個別マッチさせることで、【…(…)…】のような入れ子でも
+// 誤って別の種類の閉じ括弧で終端しないようにする。
+const BRACKET_GROUP_PATTERN =
+  /【[^】]*】|＜[^＞]*＞|（[^）]*）|\([^)]*\)|［[^］]*］|\[[^\]]*\]/g;
+
+function stripPromoBrackets(text) {
+  return text.replace(BRACKET_GROUP_PATTERN, (match) => {
+    const inner = match.slice(1, -1);
+    return PROMO_BRACKET_KEYWORDS.test(inner) ? ' ' : match;
+  });
+}
+
+// 商品名の末尾は「... 【電子書籍】[ 著者名 ]」のように著者名が半角角括弧で
+// 付与されることが多いため、内容を問わず末尾の角括弧のみ無条件で除去する
+function stripTrailingAuthorBracket(text) {
+  return text.replace(/\s*\[[^\]]*\]\s*$/, '');
+}
+
 // 「第N巻」「(N)」などの巻数表記は残しつつ、末尾の余計な記号を除去する
 function cleanTitle(line) {
-  return line
+  return stripTrailingAuthorBracket(stripPromoBrackets(line))
     .replace(/^[\s　・\-–—]+/, '')
-    .replace(/[\s　]+$/, '')
+    .replace(/[\s　\-–—]+$/, '')
     .replace(/\s{2,}/g, ' ')
     .trim();
 }

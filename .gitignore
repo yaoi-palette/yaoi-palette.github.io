@@ -8,3 +8,5 @@ data/purchase_history.csv
 data/extracted_titles.json
 data/fetch_progress.json
 data/fetch_failures.json
+data/fetch_ambiguous_matches.json
+data/fetch_run.log
