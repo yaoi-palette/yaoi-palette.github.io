@@ -10,7 +10,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "extract-titles": "node scripts/extract_titles.js",
-    "fetch-kobo": "node scripts/fetch_kobo_data.js"
+    "fetch-kobo": "node --env-file-if-exists=.env scripts/fetch_kobo_data.js"
   },
   "dependencies": {
     "astro": "^4.16.0",

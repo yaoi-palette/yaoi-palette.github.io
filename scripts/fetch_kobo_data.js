@@ -6,18 +6,22 @@
  * 総合検索API（Kobo電子書籍ジャンル）を叩いて表紙画像・アフィリ
  * エイトリンク等を取得し、src/content/books/*.json を生成する。
  *
- * 事前準備:
- *   1. 楽天ウェブサービス (https://webservice.rakuten.co.jp/) で
- *      アプリID(applicationId)を取得
+ * 事前準備（2026年の楽天API改定後の仕様）:
+ *   1. 楽天ウェブサービス (https://webservice.rakuten.co.jp/app/list) で
+ *      アプリを登録し、applicationId(UUID形式)とaccessKey("pk_"から始まる文字列)
+ *      を取得。アプリケーションURLには本サイトのURLを登録しておくこと
+ *      （Originヘッダー検証でこのURLと一致している必要がある）。
  *   2. 楽天アフィリエイト (https://affiliate.rakuten.co.jp/) で
  *      アフィリエイトID(affiliateId)を取得
- *   3. 環境変数に設定:
- *        export RAKUTEN_APP_ID="xxxxx"
- *        export RAKUTEN_AFFILIATE_ID="xxxxx"
- *   4. Node.js 18以降（組み込みfetchを使用）
+ *   3. .env ファイル（プロジェクト直下）に設定:
+ *        RAKUTEN_APP_ID="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+ *        RAKUTEN_ACCESS_KEY="pk_xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+ *        RAKUTEN_AFFILIATE_ID="xxxxx"
+ *   4. Node.js 20.6以降（--env-file-if-exists と組み込みfetchを使用）
  *
  * 使い方:
- *   node scripts/fetch_kobo_data.js
+ *   npm run fetch-kobo
+ *   （内部で node --env-file-if-exists=.env scripts/fetch_kobo_data.js を実行）
  *
  * 750冊規模のバッチ処理を想定した挙動:
  *   - data/fetch_progress.json に処理済みタイトルを記録し、途中で
@@ -52,10 +56,16 @@ const FAILURES_PATH = path.join(DATA_DIR, 'fetch_failures.json');
 const OUTPUT_DIR = path.join(__dirname, '..', 'src', 'content', 'books');
 
 const APP_ID = process.env.RAKUTEN_APP_ID;
+const ACCESS_KEY = process.env.RAKUTEN_ACCESS_KEY;
 const AFFILIATE_ID = process.env.RAKUTEN_AFFILIATE_ID;
-const GENRE_ID = process.env.RAKUTEN_GENRE_ID || '002004'; // コミック・電子書籍(Kobo)ジャンル
+// 2026年のAPI改定でジャンルID体系が変更されたため、未設定の場合はジャンル絞り込みをしない
+// （キーワード検索のみで十分実用的なため）。指定したい場合は環境変数で新ジャンルIDを渡す。
+const GENRE_ID = process.env.RAKUTEN_GENRE_ID;
+// 2026年のAPI改定でOriginヘッダーによるリクエスト元検証が必須になった。
+// アプリ登録時の「アプリケーションURL」と一致させる必要がある。
+const APP_ORIGIN = process.env.RAKUTEN_APP_ORIGIN || 'https://yaoi-palette.github.io';
 
-const API_ENDPOINT = 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20170404';
+const API_ENDPOINT = 'https://openapi.rakuten.co.jp/services/api/BooksTotal/Search/20170404';
 const REQUEST_INTERVAL_MS = 1100; // 楽天APIのレート制限に配慮
 const MAX_RETRIES = 3;
 
@@ -95,17 +105,21 @@ async function searchTitle(title) {
   const params = new URLSearchParams({
     format: 'json',
     applicationId: APP_ID,
+    accessKey: ACCESS_KEY,
     affiliateId: AFFILIATE_ID ?? '',
     keyword: title,
-    booksGenreId: GENRE_ID,
     hits: '1',
   });
+  if (GENRE_ID) params.set('booksGenreId', GENRE_ID);
 
   const url = `${API_ENDPOINT}?${params.toString()}`;
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    headers: { Origin: APP_ORIGIN },
+  });
 
   if (!res.ok) {
-    throw new Error(`APIリクエスト失敗 (${res.status})`);
+    const body = await res.text().catch(() => '');
+    throw new Error(`APIリクエスト失敗 (${res.status}): ${body.slice(0, 200)}`);
   }
 
   const data = await res.json();
@@ -219,6 +233,11 @@ async function loadJsonSafe(filePath, fallback) {
 async function main() {
   if (!APP_ID) {
     console.error('環境変数 RAKUTEN_APP_ID が設定されていません。');
+    process.exitCode = 1;
+    return;
+  }
+  if (!ACCESS_KEY) {
+    console.error('環境変数 RAKUTEN_ACCESS_KEY が設定されていません（2026年API改定によりapplicationIdと併用が必須）。');
     process.exitCode = 1;
     return;
   }
